@@ -20,6 +20,10 @@ public class FantasyTeam {
 		return present;
 	}
 	
+	public void printTeam() {
+		
+	}
+	
 	public String toString() {
 		
 		return "";
