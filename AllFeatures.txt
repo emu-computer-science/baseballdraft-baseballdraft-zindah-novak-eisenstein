@@ -1,0 +1,38 @@
+Feature List Semester Project 
+Burndown chart Sprint 1: https://docs.google.com/spreadsheets/d/1XqENLjy-m-bnZHEbnOHc3NhUC-9VL-95e8wdcKMjq-Y/edit?usp=sharing
+
+Names of team members: Nadya Novak, Farha Zindah, Jacob Eisenstein
+
+INITIAL
+Github repo
+FantasyDraft class outline and stubs
+FantasyPlayer outline and stubs
+FantasyTeam Outline and Stubs
+Database Class / stubs
+Junit Test Classes and stubs
+Get data from mlb.com into a csv file
+Initialize database from MLB data
+Usable menu method
+Create a release branch 
+
+ODRAFT
+FantasyPlayer class constructors – should set name, team, position, and ranking 
+FantasyTeam constructors
+Ability to add a player to a specified team
+
+IDRAFT - Ability to add a player to a League A
+
+OVERALL
+Evaluate if a player is pitching or non-pitching
+Print all non-pitching players by ranking
+
+POVERAll – Print all pitching players by ranking
+TEAM – Add FantasyTeam toString() method / print out current team roster
+STARS – print roster in order of draft
+SAVE the current system
+QUIT program
+RESTORE current draft state from file
+EVALFUN – evaluate non-pitcher rankings based on stats
+PEVALFUN – evaluate pitcher rankings
+HELP – provide list of possible commands and syntax
+
