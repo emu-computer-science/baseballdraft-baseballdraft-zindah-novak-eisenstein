@@ -5,9 +5,14 @@ public class FantasyDraft {
 	Scanner keyboard = new Scanner(System.in);
 
 	public static void main(String[] args) {
+		Scanner key = new Scanner(System.in); // Keyboard won't work in static method
 		// TODO Auto-generated method stub
 		
+		String command;
 		
+		System.out.println("Enter command or enter HELP to see list of available commands");
+		command = key.nextLine();
+		recieveCommand(command);
 		
 
 	}
@@ -63,7 +68,7 @@ public class FantasyDraft {
 		//list commands/syntax
 	}
 	
-	public void showMenu() {
+	public static void showMenu() {
 		//finish filling in later
 		System.out.println("Options:");
 		System.out.println("ODRAFT: ");
@@ -80,8 +85,9 @@ public class FantasyDraft {
 		System.out.println("QUIT: Quit program");
 	}
 	
-	public void recieveCommand(String command) {
+	public static void recieveCommand(String command) {
 		
+		Scanner keyboard = new Scanner(System.in);
 		String secondCommand;
 		char leagueMember;
 		
