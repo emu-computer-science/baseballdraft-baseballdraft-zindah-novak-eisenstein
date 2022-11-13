@@ -14,7 +14,7 @@ public class FantasyDraft {
 		command = key.nextLine();
 		recieveCommand(command);
 		
-
+		key.close();
 	}
 
 	//METHODS BEGIN HERE
@@ -69,7 +69,7 @@ public class FantasyDraft {
 	}
 	
 	public static void showMenu() {
-		//finish filling in later
+		//TODO:finish filling in 
 		System.out.println("Options:");
 		System.out.println("ODRAFT: ");
 		System.out.println("IDRAFT:");
@@ -164,7 +164,7 @@ public class FantasyDraft {
 			default: System.out.println("Invalid command. Type HELP to see available commands.");
 		}
 		
-		
+	keyboard.close();	
 	}
-	
+		
 }
