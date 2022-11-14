@@ -16,32 +16,39 @@ public class FantasyDraftTest {
 		fail("Not yet implemented");
 	}
 	
+	@Test
 	public void testiDraft() {
 		fail("Not yet implemented");
 		
 	}
 	
+	@Test
 	public void testOverall() {
 		fail("Not yet implemented");
 		
 	}
 	
+	@Test
 	public void testpOverall() {
 		fail("Not yet implemented");
 	}
 	
+	@Test
 	public void testTeam() {
 		fail("Not yet implemented");
 	}
 	
+	@Test
 	public void testStars() {
 		fail("Not yet implemented");
 	}
 	
+	@Test
 	public void testEvalFun() {
 		fail("Not yet implemented");
 	}
 	
+	@Test
 	public void testPEvalFun() {
 		fail("Not yet implemented");
 	}
