@@ -1,22 +1,28 @@
 
 public class FantasyPlayer {
-	private String name;
+	private String firstName;
+	private char lastInitial;
 	private String position;
+	private String team;
 	private int ranking;
-
-		public FantasyPlayer(String name,String position, int ranking)
+	
+		public FantasyPlayer(String firstName, char lastInitial, String position, 
+				String team, int ranking)
 		{
-			this.name = name;
+			this.firstName = firstName;
+			this.lastInitial = lastInitial;
 			this.position = position;
+			this.team = team;
 			this.ranking = ranking;
 		}
+
 		public String getPosition()
 		{
 			return this.position;
 		}
 		public String getName()
 		{
-			return this.name;
+			return this.firstName;
 		}
 		public int getRanking()
 		{
@@ -25,6 +31,10 @@ public class FantasyPlayer {
 		public void setPosition(String position)
 		{
 			this.position = position;
+		}
+		public String toString()
+		{
+			return firstName + " " + position + " " + team + " " + ranking + "\n" ; 
 		}
 		
 }
