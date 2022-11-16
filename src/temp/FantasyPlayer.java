@@ -1,3 +1,4 @@
+package temp;
 
 public class FantasyPlayer {
 	private String firstName;

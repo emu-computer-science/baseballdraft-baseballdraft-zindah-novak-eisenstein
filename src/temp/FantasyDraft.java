@@ -1,8 +1,14 @@
 package temp;
+import java.io.BufferedReader;
+import java.io.EOFException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class FantasyDraft {
 	Scanner keyboard = new Scanner(System.in);
+	static FantasyDatabase database;
 
 	public static void main(String[] args) {
 		Scanner key = new Scanner(System.in); // Keyboard won't work in static method
@@ -14,7 +20,11 @@ public class FantasyDraft {
 		command = key.nextLine();
 		recieveCommand(command);
 		
-		key.close();
+		// database format prints a little funny rn because it's printing a hashmap, 
+		// printing this just to make sure it works.
+		initDatabase();
+		System.out.println(database); 
+		
 	}
 
 	//METHODS BEGIN HERE
@@ -56,8 +66,8 @@ public class FantasyDraft {
 		
 	}
 	
-	public static void evalFun() {
-		
+	public static int evalFun(double d1, double d2, double d3, double d4, double d5) {
+		return 0;
 	}
 	
 	public static void pEvalFun() {
@@ -68,8 +78,58 @@ public class FantasyDraft {
 		//list commands/syntax
 	}
 	
+	
+	public static void initDatabase() {
+		
+		HashMap<String, FantasyPlayer> pitchers = new HashMap<>();
+		HashMap<String, FantasyPlayer> nPitchers = new HashMap<>();
+		FantasyPlayer player;
+		
+		// non-pitcher data is stored as First, Last, Position, Team, ERA, G, GS, IP, BB
+		// pitcher data is stored as First, Last, Position, team, AB, SB, AVG, OBP, SLG
+		double d1, d2, d3, d4, d5;
+
+		String[] files = {"baseball-non-pitchers.csv", "baseball-pitchers.csv"};
+
+		String line = "";
+		
+		try {
+			// parse the CSV files into a BufferedReader class constructor
+			for (int i = 0; i < 2; i++) 
+			{
+				BufferedReader br = new BufferedReader(new FileReader(files[i]));
+				
+				// skip first line
+				line = br.readLine();
+				
+				while ((line = br.readLine()) != null && line.charAt(1) != ',')
+				{
+					String[] playerData = line.split(",");
+					d1 = Double.parseDouble(playerData[4]);
+					d2 = Double.parseDouble(playerData[5]);
+					d3 = Double.parseDouble(playerData[6]);
+					d4 = Double.parseDouble(playerData[7]);
+					d5 = Double.parseDouble(playerData[8]);
+	
+					player = new FantasyPlayer(playerData[0], playerData[1].charAt(0), playerData[2], playerData[3],
+							evalFun(d1, d2, d3, d4, d5));
+					
+					if (i == 0)
+						nPitchers.put(playerData[0], player);
+					else 
+						pitchers.put(playerData[0], player);
+				}
+			}
+			// initialize database
+			database = new FantasyDatabase(pitchers, nPitchers);
+		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void showMenu() {
-		//TODO:finish filling in 
+		//finish filling in later
 		System.out.println("Options:");
 		System.out.println("ODRAFT: ");
 		System.out.println("IDRAFT:");
@@ -149,7 +209,7 @@ public class FantasyDraft {
 				break;
 				
 			case "evalfun":
-				evalFun();
+				evalFun(0,0,0,0,0);
 				break;
 				
 			case "pevalfun":
@@ -164,7 +224,7 @@ public class FantasyDraft {
 			default: System.out.println("Invalid command. Type HELP to see available commands.");
 		}
 		
-	keyboard.close();	
-	}
 		
+	}
+	
 }

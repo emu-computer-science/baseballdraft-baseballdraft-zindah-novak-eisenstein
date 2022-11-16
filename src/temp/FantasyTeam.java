@@ -4,7 +4,7 @@ public class FantasyTeam {
 
 	
 	public static void draft(String playerName) {
-		// Draft player to controlling league member
+		// Draft player to controling league member
 		
 	}
 	

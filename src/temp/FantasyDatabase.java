@@ -1,3 +1,4 @@
+package temp;
 import java.util.HashMap;
 
 public class FantasyDatabase {
