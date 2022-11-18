@@ -25,7 +25,7 @@ public class FantasyDraft {
 		System.out.println(database); 
 		
 		FantasyTeam leagueA = new FantasyTeam("A");
-		leagueA.addPlayer(database, "Aaron");
+		leagueA.addPlayer("1B", "Aaron");
 		System.out.println("Team: " + leagueA.toString());
 	}
 

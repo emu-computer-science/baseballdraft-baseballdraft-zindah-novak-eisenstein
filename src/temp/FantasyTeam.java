@@ -21,8 +21,8 @@ public class FantasyTeam {
 	}
 	
 	// Draft player to controlling league member
-	public void addPlayer(FantasyDatabase db, String playerName) {
-		teamPlayers.put(db.getPlayer(playerName).getPosition(), playerName);
+	public void addPlayer(String position, String playerName) {
+		teamPlayers.put(position, playerName);
 	}
 	
 	public void removePlayer(String playerName) {
