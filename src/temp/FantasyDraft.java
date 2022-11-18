@@ -1,6 +1,5 @@
 package temp;
 import java.io.BufferedReader;
-import java.io.EOFException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,7 +25,7 @@ public class FantasyDraft {
 		System.out.println(database); 
 		
 		FantasyTeam leagueA = new FantasyTeam("A");
-		leagueA.addPlayer(database.getPlayer("Aaron"));
+		leagueA.addPlayer(database, "Aaron");
 		System.out.println("Team: " + leagueA.toString());
 	}
 
@@ -38,7 +37,6 @@ public class FantasyDraft {
 	
 	public static void iDraft(String playerName) {
 		// Draft player to controling league member
-		
 	}
 	
 	public static void overall(String position) {

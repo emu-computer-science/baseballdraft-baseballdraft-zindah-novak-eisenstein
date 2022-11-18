@@ -2,47 +2,40 @@ package temp;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 
 public class FantasyTeam {
 	private String league;
 	
-	// String key is player position
-	private Hashtable<String, FantasyPlayer> teamPlayers = new Hashtable<String, FantasyPlayer>();
+	// String key is player position, playerName
+	private LinkedHashMap<String, String> teamPlayers = new LinkedHashMap<String, String>();
 
 	// constructors
 	public FantasyTeam(String league) {
 		this.league = league;
 	}
 	
-	public FantasyTeam(Hashtable<String, FantasyPlayer> teamPlayers, String league) {
+	public FantasyTeam(LinkedHashMap<String, String> teamPlayers, String league) {
 		this.teamPlayers = teamPlayers;
 		this.league = league;
 	}
 	
 	// Draft player to controlling league member
-	public void addPlayer(FantasyPlayer player) {
-		this.teamPlayers.put(player.getPosition(), player);
+	public void addPlayer(FantasyDatabase db, String playerName) {
+		teamPlayers.put(db.getPlayer(playerName).getPosition(), playerName);
 	}
 	
 	public void removePlayer(String playerName) {
-		this.teamPlayers.remove(playerName);
+		teamPlayers.remove(playerName);
 	}
 	
-	public static boolean onTeam() {
-		// Fill in
-		
-		boolean present = false;
-		
-		return present;
-	}
-	
-	public void printTeam() {
-		
+	public boolean onTeam(String playerName) {
+		return teamPlayers.containsKey(playerName);
 	}
 	
 	public String toString() {
 		
-		return teamPlayers.values().toString();
+		return teamPlayers.toString();
 	}
 }
 
