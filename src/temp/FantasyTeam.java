@@ -3,7 +3,7 @@ package temp;
 import java.util.ArrayList;
 
 public class FantasyTeam {
-	private String league;
+	private char league;
 
 	private String[] positions = { "C", "1B", "2B", "3B", "SS", "LF", "CF", 
 			"RF", "P1", "P2", "P3", "P4", "P5" };
@@ -11,11 +11,11 @@ public class FantasyTeam {
 	private ArrayList<FantasyPlayer> teamPlayers = new ArrayList<>();
 
 	// constructors
-	public FantasyTeam(String league) {
+	public FantasyTeam(char league) {
 		this.league = league;
 	}
 
-	public FantasyTeam(ArrayList<FantasyPlayer> teamPlayers, String league) {
+	public FantasyTeam(ArrayList<FantasyPlayer> teamPlayers, char league) {
 		this.teamPlayers = teamPlayers;
 		this.league = league;
 	}

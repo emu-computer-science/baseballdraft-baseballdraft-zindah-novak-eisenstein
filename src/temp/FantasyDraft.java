@@ -12,27 +12,38 @@ public class FantasyDraft {
 	public static void main(String[] args) {
 		Scanner key = new Scanner(System.in); // Keyboard won't work in static method
 		// TODO Auto-generated method stub
-		
-		String command;
-		
-		System.out.println("Enter command or enter HELP to see list of available commands");
-		command = key.nextLine();
-		recieveCommand(command);
+		initDatabase();
+		while(true)
+		{
+			String command;
+			System.out.println("Enter command or enter HELP to see list of available commands");
+			command = key.nextLine();
+			recieveCommand(command);
+			
+		}
 		
 		// database format prints a little funny rn because it's printing a hashmap, 
 		// printing this just to make sure it works.
-		initDatabase();
-		System.out.println(database); 
+	
+		//System.out.println(database); 
 		
-		FantasyTeam leagueA = new FantasyTeam("A");
-		leagueA.addPlayer(database.getPlayer("Aaron"));
-		leagueA.addPlayer(database.getPlayer("Paul"));
-		System.out.println("Team:\n" + leagueA.toString());
+		//FantasyTeam leagueA = new FantasyTeam('A');
+		//leagueA.addPlayer(database.getPlayer("Aaron"));
+		//leagueA.addPlayer(database.getPlayer("Paul"));
+		//System.out.println("Team:\n" + leagueA.toString());
 	}
 
 	//METHODS BEGIN HERE
-	public static void oDraft(String playerName, char leagueMember) {
+	public static void oDraft(String playerName, FantasyTeam leagueMember) {
 		// Draft player to league member
+		if(database.getPlayer(playerName) == null)
+		{
+			System.out.println("There is no such player in the database");
+		}
+		else
+		{
+			leagueMember.addPlayer(database.getPlayer(playerName));
+		}
 		
 	}
 	
@@ -61,6 +72,7 @@ public class FantasyDraft {
 	}
 	
 	public static void quit() {
+		System.exit(0);
 		
 	}
 	
@@ -148,6 +160,10 @@ public class FantasyDraft {
 		Scanner keyboard = new Scanner(System.in);
 		String secondCommand;
 		char leagueMember;
+		FantasyTeam leagueA = new FantasyTeam('A');
+		FantasyTeam leagueB = new FantasyTeam('B');
+		FantasyTeam leagueC = new FantasyTeam('C');
+		FantasyTeam leagueD = new FantasyTeam('D');
 		
 		switch(command.toLowerCase()) {
 		//TODO:rename commands to something more natural/user friendly?
@@ -158,8 +174,22 @@ public class FantasyDraft {
 				secondCommand = keyboard.nextLine();
 				System.out.println("Enter participant letter");
 				leagueMember = keyboard.next().charAt(0);
+				if(leagueMember == 'A') {
+					oDraft(secondCommand,leagueA);
+				}
+				else if(leagueMember == 'B')
+				{
+					oDraft(secondCommand,leagueB);
+				}
+				else if(leagueMember == 'C')
+				{
+					oDraft(secondCommand,leagueC);
+				}
+				else if(leagueMember == 'D')
+				{
+					oDraft(secondCommand,leagueD);
+				}
 				
-				oDraft(secondCommand, leagueMember);
 				break;
 			
 			case "idraft":
