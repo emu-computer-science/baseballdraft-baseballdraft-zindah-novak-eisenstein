@@ -19,6 +19,10 @@ public class FantasyDatabase {
 	{
 		return players.get(player);
 	}
+	public String getPosition(String player)
+	{
+		return players.get(player).getPosition();
+	}
 	
 	@Override
 	public String toString()

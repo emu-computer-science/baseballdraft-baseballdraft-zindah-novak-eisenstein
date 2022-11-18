@@ -5,17 +5,17 @@ import java.util.Hashtable;
 import java.util.LinkedHashMap;
 
 public class FantasyTeam {
-	private String league;
+	private char league;
 	
 	// String key is player position, playerName
 	private LinkedHashMap<String, String> teamPlayers = new LinkedHashMap<String, String>();
 
 	// constructors
-	public FantasyTeam(String league) {
+	public FantasyTeam(char league) {
 		this.league = league;
 	}
 	
-	public FantasyTeam(LinkedHashMap<String, String> teamPlayers, String league) {
+	public FantasyTeam(LinkedHashMap<String, String> teamPlayers, char league) {
 		this.teamPlayers = teamPlayers;
 		this.league = league;
 	}
