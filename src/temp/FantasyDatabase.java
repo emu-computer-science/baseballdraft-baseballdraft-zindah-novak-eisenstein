@@ -3,30 +3,26 @@ import java.util.HashMap;
 
 public class FantasyDatabase {
 	// Accessed using player first name
-	HashMap<String, FantasyPlayer> nPitchers = new HashMap<>();
-
-	HashMap<String, FantasyPlayer> pitchers = new HashMap<>();
+	HashMap<String, FantasyPlayer> players = new HashMap<>();
 	
-	public FantasyDatabase(HashMap<String, FantasyPlayer> nPitchers, 
-			HashMap<String, FantasyPlayer> pitchers)
+	public FantasyDatabase(HashMap<String, FantasyPlayer> players)
 	{
-		this.nPitchers = nPitchers;
-		this.pitchers = pitchers;
+		this.players = players;
 	}
 	
-	public HashMap<String, FantasyPlayer> getPitchers()
+	public HashMap<String, FantasyPlayer> getPlayersMap()
 	{
-		return pitchers;
+		return players;
 	}
 	
-	public HashMap<String, FantasyPlayer> getNonPitchers()
+	public FantasyPlayer getPlayer(String player)
 	{
-		return nPitchers;
+		return players.get(player);
 	}
 	
 	@Override
 	public String toString()
 	{
-		return pitchers.toString() + nPitchers.toString();
+		return players.values().toString();
 	}
 }

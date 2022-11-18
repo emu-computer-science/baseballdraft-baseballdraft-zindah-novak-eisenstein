@@ -25,6 +25,9 @@ public class FantasyDraft {
 		initDatabase();
 		System.out.println(database); 
 		
+		FantasyTeam leagueA = new FantasyTeam("A");
+		leagueA.addPlayer(database.getPlayer("Aaron"));
+		System.out.println("Team: " + leagueA.toString());
 	}
 
 	//METHODS BEGIN HERE
@@ -81,8 +84,7 @@ public class FantasyDraft {
 	
 	public static void initDatabase() {
 		
-		HashMap<String, FantasyPlayer> pitchers = new HashMap<>();
-		HashMap<String, FantasyPlayer> nPitchers = new HashMap<>();
+		HashMap<String, FantasyPlayer> players = new HashMap<>();
 		FantasyPlayer player;
 		
 		// non-pitcher data is stored as First, Last, Position, Team, ERA, G, GS, IP, BB
@@ -113,15 +115,12 @@ public class FantasyDraft {
 	
 					player = new FantasyPlayer(playerData[0], playerData[1].charAt(0), playerData[2], playerData[3],
 							evalFun(d1, d2, d3, d4, d5));
-					
-					if (i == 0)
-						nPitchers.put(playerData[0], player);
-					else 
-						pitchers.put(playerData[0], player);
+
+					players.put(playerData[0], player);
 				}
 			}
 			// initialize database
-			database = new FantasyDatabase(pitchers, nPitchers);
+			database = new FantasyDatabase(players);
 		
 		} catch (IOException e) {
 			e.printStackTrace();
