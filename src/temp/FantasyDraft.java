@@ -7,48 +7,53 @@ import java.util.Scanner;
 
 public class FantasyDraft {
 	Scanner keyboard = new Scanner(System.in);
-	static FantasyDatabase database;
+	static FantasyDatabase database = new FantasyDatabase();
 
 	public static void main(String[] args) {
 		Scanner key = new Scanner(System.in); // Keyboard won't work in static method
 		// TODO Auto-generated method stub
 		initDatabase();
+		FantasyTeam leagueA = new FantasyTeam('A');
+		FantasyTeam leagueB = new FantasyTeam('B');
+		FantasyTeam leagueC = new FantasyTeam('C');
+		FantasyTeam leagueD = new FantasyTeam('D');
+		
+		System.out.println(database);
 		while(true)
 		{
 			String command;
 			System.out.println("Enter command or enter HELP to see list of available commands");
 			command = key.nextLine();
-			recieveCommand(command);
+			recieveCommand(command, leagueA, leagueB, leagueC, leagueD);
 			
 		}
-		
-		// database format prints a little funny rn because it's printing a hashmap, 
-		// printing this just to make sure it works.
-	
-		//System.out.println(database); 
-		
-		//FantasyTeam leagueA = new FantasyTeam('A');
-		//leagueA.addPlayer(database.getPlayer("Aaron"));
-		//leagueA.addPlayer(database.getPlayer("Paul"));
-		//System.out.println("Team:\n" + leagueA.toString());
 	}
 
 	//METHODS BEGIN HERE
 	public static void oDraft(String playerName, FantasyTeam leagueMember) {
 		// Draft player to league member
-		if(database.getPlayer(playerName) == null)
+		FantasyPlayer tempP = database.getPlayer(playerName);
+
+		if(tempP == null)
 		{
 			System.out.println("There is no such player in the database");
 		}
-		else
+		else if (!database.isAvailable(tempP))
 		{
-			leagueMember.addPlayer(database.getPlayer(playerName));
+			System.out.println("That player has been drafted");
 		}
+		else if (!(leagueMember.hasPosition(tempP.getPosition())))
+		{
+			leagueMember.addPlayer(tempP);
+			database.addDrafted(tempP);
+		}
+		else
+			System.out.println("You already have a player for position " + tempP.getPosition());
 		
 	}
 	
-	public static void iDraft(String playerName) {
-		// Draft player to controling league member
+	public static void iDraft(String playerName, FantasyTeam memberA) {
+		oDraft(playerName, memberA);
 	}
 	
 	public static void overall(String position) {
@@ -80,12 +85,12 @@ public class FantasyDraft {
 		
 	}
 	
-	public static int evalFun(double d1, double d2, double d3, double d4, double d5) {
-		return 0;
+	public static double evalFun(double AB, double SB, double AVG, double OBP, double SLG) {
+		return AVG;
 	}
 	
-	public static void pEvalFun() {
-		
+	public static double pEvalFun(double ERA, double G, double IP, double GS, double BB) {
+		return IP;
 	}
 	
 	public static void help () {
@@ -95,16 +100,17 @@ public class FantasyDraft {
 	
 	public static void initDatabase() {
 		
-		HashMap<String, FantasyPlayer> players = new HashMap<>();
 		FantasyPlayer player;
 		
-		// non-pitcher data is stored as First, Last, Position, Team, ERA, G, GS, IP, BB
-		// pitcher data is stored as First, Last, Position, team, AB, SB, AVG, OBP, SLG
+		// pitcher data is stored as First, Last, Position, Team, ERA, G, GS, IP, BB
+		// non-pitcher data is stored as First, Last, Position, team, AB, SB, AVG, OBP, SLG
 		double d1, d2, d3, d4, d5;
 
 		String[] files = {"baseball-non-pitchers.csv", "baseball-pitchers.csv"};
 
 		String line = "";
+		
+		double ranking = 0;
 		
 		try {
 			// parse the CSV files into a BufferedReader class constructor
@@ -123,15 +129,20 @@ public class FantasyDraft {
 					d3 = Double.parseDouble(playerData[6]);
 					d4 = Double.parseDouble(playerData[7]);
 					d5 = Double.parseDouble(playerData[8]);
-	
+					
+					// find and set ranking for pitchers and hitters
+					if (i == 0)
+						ranking = evalFun(d1, d2, d3, d4, d5);
+					else
+						ranking = pEvalFun(d1, d2, d3, d4, d5);
+					
+					// create and add a new player to the database
 					player = new FantasyPlayer(playerData[0], playerData[1].charAt(0), playerData[2], playerData[3],
 							evalFun(d1, d2, d3, d4, d5));
 
-					players.put(playerData[0], player);
+					database.addPlayer(playerData[0], player);
 				}
 			}
-			// initialize database
-			database = new FantasyDatabase(players);
 		
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -155,25 +166,22 @@ public class FantasyDraft {
 		System.out.println("QUIT: Quit program");
 	}
 	
-	public static void recieveCommand(String command) {
+	public static void recieveCommand(String command, FantasyTeam leagueA, FantasyTeam leagueB,
+			FantasyTeam leagueC, FantasyTeam leagueD) {
 		
 		Scanner keyboard = new Scanner(System.in);
 		String secondCommand;
 		char leagueMember;
-		FantasyTeam leagueA = new FantasyTeam('A');
-		FantasyTeam leagueB = new FantasyTeam('B');
-		FantasyTeam leagueC = new FantasyTeam('C');
-		FantasyTeam leagueD = new FantasyTeam('D');
+
 		
 		switch(command.toLowerCase()) {
 		//TODO:rename commands to something more natural/user friendly?
-		
 			
 			case "odraft":
 				System.out.println("Enter player name");
 				secondCommand = keyboard.nextLine();
 				System.out.println("Enter participant letter");
-				leagueMember = keyboard.next().charAt(0);
+				leagueMember = Character.toUpperCase(keyboard.next().charAt(0));
 				if(leagueMember == 'A') {
 					oDraft(secondCommand,leagueA);
 				}
@@ -189,13 +197,13 @@ public class FantasyDraft {
 				{
 					oDraft(secondCommand,leagueD);
 				}
-				
 				break;
 			
 			case "idraft":
 				System.out.println("Enter player name");
-				secondCommand = keyboard.nextLine();
-				iDraft(secondCommand);
+				String playerName = keyboard.nextLine();
+				iDraft(playerName, leagueA);
+				System.out.println("Team: " + leagueA.toString());
 				break;
 			
 			case "overall":
@@ -241,7 +249,7 @@ public class FantasyDraft {
 				break;
 				
 			case "pevalfun":
-				pEvalFun();
+				//pEvalFun();
 				break;
 				
 			case "help":

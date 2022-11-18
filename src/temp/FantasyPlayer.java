@@ -5,10 +5,10 @@ public class FantasyPlayer {
 	private char lastInitial;
 	private String position;
 	private String team;
-	private int ranking;
+	private double ranking;
 
 	public FantasyPlayer(String firstName, char lastInitial, String position, 
-			String team, int ranking) {
+			String team, double ranking) {
 		this.firstName = firstName;
 		this.lastInitial = lastInitial;
 		this.position = position;
@@ -24,7 +24,7 @@ public class FantasyPlayer {
 		return this.firstName;
 	}
 
-	public int getRanking() {
+	public double getRanking() {
 		return this.ranking;
 	}
 
