@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class FantasyTeam {
 	
 	/**Data Members*/
-	private String[] positions = { "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "P1", "P2", "P3", "P4", "P5" };
+	private String[] positions = { "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "P"};
 	private char League;
 	private ArrayList<FantasyPlayer> teamPlayers;
 
@@ -53,6 +53,15 @@ public class FantasyTeam {
 		return false;
 	}
 	
+	public int getNumPitchers()
+	{
+		int num = 0;
+		for (FantasyPlayer p : teamPlayers)
+			if (p.getPosition() == "P")
+				num += 1;
+		return num;
+	}
+	
 	/** Return team league */
 	public char getLeague()
 	{
@@ -62,9 +71,19 @@ public class FantasyTeam {
 	@Override
 	public String toString() {
 		String team = "";
-
-		for (FantasyPlayer p : teamPlayers) {
-			team += p.getPosition() + " " + p.getName() + " " + p.getLast() + "\n";
+		int numP = 0;
+		
+		for (String pos : positions)
+		{
+			for (FantasyPlayer p : teamPlayers) {
+				if (pos.equals("P") && p.getPosition().equals(pos))
+				{	
+					numP += 1;
+					team += "P" + numP + " " + p.getName() + " " + p.getLast() + "\n";
+				}
+				else if (p.getPosition().equals(pos))
+					team += p.getPosition() + " " + p.getName() + " " + p.getLast() + "\n";
+			}
 		}
 		return team;
 	}
