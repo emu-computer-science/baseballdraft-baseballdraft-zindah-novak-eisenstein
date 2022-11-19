@@ -1,4 +1,5 @@
 package temp;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FantasyDatabase {
@@ -40,6 +41,29 @@ public class FantasyDatabase {
 		if (drafted.containsValue(p))
 			return false;
 		return true;
+	}
+	
+	public ArrayList<FantasyPlayer> getPlayersByPosition(String position)
+	{
+		ArrayList<FantasyPlayer> playersInPosition = new ArrayList<>();
+		
+		for (FantasyPlayer p : players.values())
+		{
+			if(p.getPosition().equals(position))
+			{
+				playersInPosition.add(p);
+			}
+			else if (position.equals("hitters") && (!p.getPosition().equals("P")))
+			{
+				playersInPosition.add(p);
+			}
+			else if (position.equals("pitchers") && p.getPosition().equals("P"))
+			{
+				playersInPosition.add(p);
+			}
+		}
+		
+		return playersInPosition;
 	}
 	
 	public void addDrafted(FantasyPlayer p)

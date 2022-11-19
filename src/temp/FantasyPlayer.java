@@ -1,5 +1,7 @@
 package temp;
 
+import java.util.Comparator;
+
 public class FantasyPlayer {
 	private String firstName;
 	private char lastInitial;
@@ -36,4 +38,12 @@ public class FantasyPlayer {
 		return firstName + " " + team + " " + position + " " + ranking;
 	}
 
+}
+
+class playerComparator implements Comparator<FantasyPlayer>
+{
+    public int compare(FantasyPlayer p1, FantasyPlayer p2)
+    {
+        return p1.getRanking() > p2.getRanking() ? 1 : -1;
+    }
 }

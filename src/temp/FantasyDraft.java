@@ -2,6 +2,9 @@ package temp;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -56,12 +59,27 @@ public class FantasyDraft {
 		oDraft(playerName, memberA);
 	}
 	
-	public static void overall(String position) {
+	public static void overall(String position, FantasyTeam memberA) {
+		ArrayList<FantasyPlayer> tempPlayers = null;
+		
 		//print player rankings in given position
-	}
+		if (position == " ")
+			tempPlayers = database.getPlayersByPosition("hitters");
+		
+		else if (memberA.hasPosition(position))
+			System.out.println("You already have a player for position " + position);
 	
-	public static void pOverall () {
-		//Overall just for pitchers
+		else 
+			tempPlayers = database.getPlayersByPosition(position);
+		
+		Collections.sort(tempPlayers, new playerComparator());
+
+		for (FantasyPlayer p : tempPlayers)
+		{
+			if(!(memberA.hasPosition(p.getPosition()) && database.isAvailable(p)))
+				System.out.println(p);
+		}
+			
 	}
 	
 	public static void team (char leagueMember) {
@@ -170,11 +188,16 @@ public class FantasyDraft {
 			FantasyTeam leagueC, FantasyTeam leagueD) {
 		
 		Scanner keyboard = new Scanner(System.in);
-		String secondCommand;
+
 		char leagueMember;
 
+		String commandFirst = command.split(" ")[0].toLowerCase();
+		String secondCommand = " ";
 		
-		switch(command.toLowerCase()) {
+		if (command.split(" ").length == 2)
+			 secondCommand = command.split(" ")[1];
+		
+		switch(commandFirst) {
 		//TODO:rename commands to something more natural/user friendly?
 			
 			case "odraft":
@@ -207,13 +230,11 @@ public class FantasyDraft {
 				break;
 			
 			case "overall":
-				System.out.println("Enter position or press enter");
-				secondCommand = keyboard.nextLine();
-				overall(secondCommand);
+				overall(secondCommand, leagueA);
 				break;
 				
 			case "poverall":
-				pOverall();
+				overall("pitchers", leagueA);
 				break;
 				
 			case "team":

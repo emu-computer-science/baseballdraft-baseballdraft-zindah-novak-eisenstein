@@ -35,7 +35,6 @@ public class FantasyTeam {
 	}
 
 	public boolean hasPosition(String position) {
-		System.out.println(teamPlayers);
 		for (FantasyPlayer p : teamPlayers) {
 			if (p.getPosition() == position)
 				return true;
