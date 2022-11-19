@@ -4,7 +4,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-
+/**
+ * FantasyDraftTest.java class tests the main method FantasyDraft
+ * 
+ * @author Zindah, Novak, Eisenstein
+ * @version (11-18-2022)
+ *
+ */
 public class FantasyDraftTest {
 
 	@Before
@@ -25,7 +31,6 @@ public class FantasyDraftTest {
 	@Test
 	public void testOverall() {
 		fail("Not yet implemented");
-		
 	}
 	
 	@Test

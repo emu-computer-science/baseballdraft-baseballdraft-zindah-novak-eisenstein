@@ -7,34 +7,42 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
-
+/**
+ * FantasyDraft.java class implements a fantasy baseball draft
+ * 
+ * @author Zindah, Novak, Eisenstein
+ * @version (11-18-2022)
+ *
+ */
 public class FantasyDraft {
-	Scanner keyboard = new Scanner(System.in);
+	
+	/** Data members */
 	static FantasyDatabase database = new FantasyDatabase();
 
 	public static void main(String[] args) {
-		Scanner key = new Scanner(System.in); // Keyboard won't work in static method
-		// TODO Auto-generated method stub
-		initDatabase();
-		FantasyTeam leagueA = new FantasyTeam('A');
-		FantasyTeam leagueB = new FantasyTeam('B');
-		FantasyTeam leagueC = new FantasyTeam('C');
-		FantasyTeam leagueD = new FantasyTeam('D');
+		// initialize scanner
+		Scanner key = new Scanner(System.in); 
 		
-		System.out.println(database);
+		// populate mlb database
+		initDatabase();
+		FantasyTeam leagueA = new FantasyTeam();
+		FantasyTeam leagueB = new FantasyTeam();
+		FantasyTeam leagueC = new FantasyTeam();
+		FantasyTeam leagueD = new FantasyTeam();
+		
+		// run menu
 		while(true)
 		{
 			String command;
 			System.out.println("Enter command or enter HELP to see list of available commands");
 			command = key.nextLine();
 			recieveCommand(command, leagueA, leagueB, leagueC, leagueD);
-			
 		}
 	}
 
-	//METHODS BEGIN HERE
+	/** Drafts a player to the given league member */
 	public static void oDraft(String playerName, FantasyTeam leagueMember) {
-		// Draft player to league member
+
 		FantasyPlayer tempP = database.getPlayer(playerName);
 
 		if(tempP == null)
@@ -43,7 +51,7 @@ public class FantasyDraft {
 		}
 		else if (!database.isAvailable(tempP))
 		{
-			System.out.println("That player has been drafted");
+			System.out.println("That player has already been drafted");
 		}
 		else if (!(leagueMember.hasPosition(tempP.getPosition())))
 		{
@@ -52,53 +60,61 @@ public class FantasyDraft {
 		}
 		else
 			System.out.println("You already have a player for position " + tempP.getPosition());
-		
 	}
 	
+	/** Drafts a player to league member A */
 	public static void iDraft(String playerName, FantasyTeam memberA) {
 		oDraft(playerName, memberA);
 	}
 	
+	/** Prints out players of the given non-pitching positions */
 	public static void overall(String position, FantasyTeam memberA) {
 		ArrayList<FantasyPlayer> tempPlayers = null;
 		
-		//print player rankings in given position
+		// get player rankings in given position
 		if (position == " ")
 			tempPlayers = database.getPlayersByPosition("hitters");
-		
 		else if (memberA.hasPosition(position))
 			System.out.println("You already have a player for position " + position);
-	
 		else 
 			tempPlayers = database.getPlayersByPosition(position);
 		
-		Collections.sort(tempPlayers, new playerComparator());
-
-		for (FantasyPlayer p : tempPlayers)
+		// sort players by ranking
+		if (tempPlayers != null)
 		{
-			if(!(memberA.hasPosition(p.getPosition()) && database.isAvailable(p)))
-				System.out.println(p);
+			Collections.sort(tempPlayers, new playerComparator());
+
+			// print out sorted array
+			for (FantasyPlayer p : tempPlayers)
+			{
+				if((!memberA.hasPosition(p.getPosition())) && (database.isAvailable(p)))
+					System.out.println(p);
+			}
 		}
-			
 	}
 	
+	/** prints out given team roster in position order */
 	public static void team (char leagueMember) {
 		//print roster for given member
 	}
 	
+	/** prints out given team roster in order of draft*/
 	public static void stars(char leagueMember) {
-		//Same as TEAM, but the ordering of the players matches the order in which they were drafted overall
+		//Same as TEAM, but the ordering of the players matches the 
+		//order in which they were drafted overall
 	}
 	
+	/** save team data */
 	public static void save (String filename) {
 		
 	}
 	
+	/** quit program */
 	public static void quit() {
 		System.exit(0);
-		
 	}
 	
+	/** restore session */
 	public static void restore(String filename) {
 		
 	}
@@ -111,11 +127,12 @@ public class FantasyDraft {
 		return IP;
 	}
 	
+	/** list commands/syntax */
 	public static void help () {
 		//list commands/syntax
 	}
 	
-	
+	/** Populate MLB player database */
 	public static void initDatabase() {
 		
 		FantasyPlayer player;
@@ -131,7 +148,7 @@ public class FantasyDraft {
 		double ranking = 0;
 		
 		try {
-			// parse the CSV files into a BufferedReader class constructor
+			// parse the CSV files 
 			for (int i = 0; i < 2; i++) 
 			{
 				BufferedReader br = new BufferedReader(new FileReader(files[i]));
@@ -155,10 +172,10 @@ public class FantasyDraft {
 						ranking = pEvalFun(d1, d2, d3, d4, d5);
 					
 					// create and add a new player to the database
-					player = new FantasyPlayer(playerData[0], playerData[1].charAt(0), playerData[2], playerData[3],
+					player = new FantasyPlayer(playerData[0], playerData[1], playerData[2], playerData[3],
 							evalFun(d1, d2, d3, d4, d5));
 
-					database.addPlayer(playerData[0], player);
+					database.addPlayer(playerData[1] + ", " + playerData[0].charAt(0), player);
 				}
 			}
 		
@@ -167,6 +184,7 @@ public class FantasyDraft {
 		}
 	}
 
+	/** Run menu program */
 	public static void showMenu() {
 		//finish filling in later
 		System.out.println("Options:");
@@ -200,37 +218,41 @@ public class FantasyDraft {
 		switch(commandFirst) {
 		//TODO:rename commands to something more natural/user friendly?
 			
+		//odraft has to Enter player name surrounded by quotes and league member");
+		//Ex: odraft "Martinez, A" A ;
 			case "odraft":
-				System.out.println("Enter player name");
-				secondCommand = keyboard.nextLine();
-				System.out.println("Enter participant letter");
-				leagueMember = Character.toUpperCase(keyboard.next().charAt(0));
+				String name = command.split("\"")[1];
+				leagueMember = Character.toUpperCase(command.split("\"")[2].trim().charAt(0));
+	
 				if(leagueMember == 'A') {
-					oDraft(secondCommand,leagueA);
+					oDraft(name,leagueA);
 				}
 				else if(leagueMember == 'B')
 				{
-					oDraft(secondCommand,leagueB);
+					oDraft(name,leagueB);
 				}
 				else if(leagueMember == 'C')
 				{
-					oDraft(secondCommand,leagueC);
+					oDraft(name,leagueC);
 				}
 				else if(leagueMember == 'D')
 				{
-					oDraft(secondCommand,leagueD);
+					oDraft(name,leagueD);
 				}
 				break;
 			
 			case "idraft":
-				System.out.println("Enter player name");
-				String playerName = keyboard.nextLine();
-				iDraft(playerName, leagueA);
+				name = command.split("\"")[1];
+				
+				iDraft(name, leagueA);
 				System.out.println("Team: " + leagueA.toString());
 				break;
 			
 			case "overall":
-				overall(secondCommand, leagueA);
+				if (!secondCommand.equals("P"))
+					overall(secondCommand, leagueA);
+				else
+					System.out.println("Overall doesn't print pitchers");
 				break;
 				
 			case "poverall":

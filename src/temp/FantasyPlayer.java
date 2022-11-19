@@ -1,45 +1,66 @@
 package temp;
 
 import java.util.Comparator;
-
+/**
+ * FantasyPlayer.java class represents a fantasy baseball player
+ * 
+ * @author Zindah, Novak, Eisenstein
+ * @version (11-18-2022)
+ *
+ */
 public class FantasyPlayer {
+	
+	/** Data members */
 	private String firstName;
-	private char lastInitial;
+	private String lastName;
 	private String position;
 	private String team;
 	private double ranking;
 
-	public FantasyPlayer(String firstName, char lastInitial, String position, 
+	/** Construct a player with the given values */
+	public FantasyPlayer(String firstName, String lastName, String position, 
 			String team, double ranking) {
 		this.firstName = firstName;
-		this.lastInitial = lastInitial;
+		this.lastName = lastName;
 		this.position = position;
 		this.team = team;
 		this.ranking = ranking;
 	}
 
+	/** Get player position */
 	public String getPosition() {
 		return this.position;
 	}
 
+	/** Get player first name */
 	public String getName() {
 		return this.firstName;
 	}
 
+	/** Get player last name */
+	public String getLast() {
+		return this.lastName;
+	}	
+	
+	/** Get player ranking */
 	public double getRanking() {
 		return this.ranking;
 	}
 
-	public void setPosition(String position) {
-		this.position = position;
-	}
-
+	/** Return a string representing the player */
+	@Override 
 	public String toString() {
-		return firstName + " " + team + " " + position + " " + ranking;
+		return firstName + " " + lastName + " " + team + " " + position + " " + ranking;
 	}
 
 }
 
+/**
+ * 
+ * @author Zindah
+ * Comparator class to compare FantasyPlayer values
+ *
+ */
 class playerComparator implements Comparator<FantasyPlayer>
 {
     public int compare(FantasyPlayer p1, FantasyPlayer p2)
