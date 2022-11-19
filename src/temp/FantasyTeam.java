@@ -66,7 +66,6 @@ public class FantasyTeam {
 		for (FantasyPlayer p : teamPlayers) {
 			team += p.getPosition() + " " + p.getName() + " " + p.getLast() + "\n";
 		}
-
 		return team;
 	}
 }
