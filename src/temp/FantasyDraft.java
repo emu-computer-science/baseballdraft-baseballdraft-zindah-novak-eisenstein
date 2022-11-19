@@ -94,8 +94,9 @@ public class FantasyDraft {
 	}
 	
 	/** prints out given team roster in position order */
-	public static void team (char leagueMember) {
+	public static void team (FantasyTeam leagueMember) {
 		//print roster for given member
+		System.out.println(leagueMember.toString());	
 	}
 	
 	/** prints out given team roster in order of draft*/
@@ -262,7 +263,24 @@ public class FantasyDraft {
 			case "team":
 				System.out.println("Enter participant letter");
 				leagueMember = keyboard.next().charAt(0);
-				team(leagueMember);
+				char leagueMemberCap = Character.toUpperCase(leagueMember);
+				switch(leagueMemberCap) {
+					case 'A':
+						team(leagueA);
+						break;
+					case 'B':
+						team(leagueB);
+						break;
+					case 'C':
+						team(leagueC);
+						break;
+					case 'D':
+						team(leagueD);
+						break;
+					default:
+						System.out.println("Invalid team name");
+						break;
+				}
 				break;
 				
 			case "stars":
