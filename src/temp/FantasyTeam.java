@@ -13,17 +13,19 @@ public class FantasyTeam {
 	
 	/**Data Members*/
 	private String[] positions = { "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "P1", "P2", "P3", "P4", "P5" };
-
+	private char League;
 	private ArrayList<FantasyPlayer> teamPlayers;
 
 	/** Constructor an empty team */
-	public FantasyTeam() {
+	public FantasyTeam(char league) {
 		teamPlayers = new ArrayList<>();
+		this.League = league;
 	}
 
 	/** Construct a team with the given players*/
-	public FantasyTeam(ArrayList<FantasyPlayer> teamPlayers) {
+	public FantasyTeam(ArrayList<FantasyPlayer> teamPlayers, char league) {
 		this.teamPlayers = teamPlayers;
+		this.League = league;
 	}
 
 	/** Draft player to the team */
@@ -50,7 +52,13 @@ public class FantasyTeam {
 		}
 		return false;
 	}
-
+	
+	/** Return team league */
+	public char getLeague()
+	{
+		return League;
+	}
+	
 	@Override
 	public String toString() {
 		String team = "";

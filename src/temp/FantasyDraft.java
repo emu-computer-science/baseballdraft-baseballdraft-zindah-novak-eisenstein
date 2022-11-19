@@ -25,10 +25,10 @@ public class FantasyDraft {
 		
 		// populate mlb database
 		initDatabase();
-		FantasyTeam leagueA = new FantasyTeam();
-		FantasyTeam leagueB = new FantasyTeam();
-		FantasyTeam leagueC = new FantasyTeam();
-		FantasyTeam leagueD = new FantasyTeam();
+		FantasyTeam leagueA = new FantasyTeam('A');
+		FantasyTeam leagueB = new FantasyTeam('B');
+		FantasyTeam leagueC = new FantasyTeam('C');
+		FantasyTeam leagueD = new FantasyTeam('D');
 		
 		// run menu
 		while(true)
@@ -57,6 +57,8 @@ public class FantasyDraft {
 		{
 			leagueMember.addPlayer(tempP);
 			database.addDrafted(tempP);
+			System.out.println(tempP.getName() + " has been drafted to team " + 
+			leagueMember.getLeague());
 		}
 		else
 			System.out.println("You already have a player for position " + tempP.getPosition());
@@ -245,7 +247,6 @@ public class FantasyDraft {
 				name = command.split("\"")[1];
 				
 				iDraft(name, leagueA);
-				System.out.println("Team: " + leagueA.toString());
 				break;
 			
 			case "overall":
