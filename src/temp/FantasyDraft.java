@@ -170,12 +170,12 @@ public class FantasyDraft {
 	public static void showMenu() {
 		//finish filling in later
 		System.out.println("Options:");
-		System.out.println("ODRAFT: ");
-		System.out.println("IDRAFT:");
-		System.out.println("OVERALL:");
-		System.out.println("POVERALL:");
-		System.out.println("TEAM:");
-		System.out.println("STARS:");
+		System.out.println("ODRAFT: Draft player to specified team");
+		System.out.println("IDRAFT: Draft player to own team");
+		System.out.println("OVERALL: View ranking for players in given (non-pitcher) position");
+		System.out.println("POVERALL: View ranking pr pitchers");
+		System.out.println("TEAM: View roster of given team");
+		System.out.println("STARS: View roster of given team in drafting order");
 		System.out.println("SAVE: Save file");
 		System.out.println("RESTORE: Restore saved file");
 		System.out.println("EVALFUN: ");
