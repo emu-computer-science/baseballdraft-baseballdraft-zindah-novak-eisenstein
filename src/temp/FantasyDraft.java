@@ -25,6 +25,8 @@ public class FantasyDraft {
 		
 		// populate mlb database
 		initDatabase();
+		
+		// create teams
 		FantasyTeam leagueA = new FantasyTeam('A');
 		FantasyTeam leagueB = new FantasyTeam('B');
 		FantasyTeam leagueC = new FantasyTeam('C');
@@ -55,10 +57,13 @@ public class FantasyDraft {
 		}
 		else if (!(leagueMember.hasPosition(tempP.getPosition())))
 		{
-			leagueMember.addPlayer(tempP);
-			database.addDrafted(tempP);
-			System.out.println(tempP.getName() + " has been drafted to team " + 
-			leagueMember.getLeague());
+			if (leagueMember.addPlayer(tempP))
+			{
+				database.addDrafted(tempP);
+				System.out.println(tempP.getName() + " has been drafted to team " + leagueMember.getLeague());
+			}
+			else
+				System.out.println("The " + tempP.getPosition() + " position is full");
 		}
 		else
 			System.out.println("You already have a player for position " + tempP.getPosition());
@@ -75,11 +80,17 @@ public class FantasyDraft {
 		
 		// get player rankings in given position
 		if (position == " ")
+		{
 			tempPlayers = database.getPlayersByPosition("hitters");
+		}
 		else if (memberA.hasPosition(position))
+		{
 			System.out.println("You already have a player for position " + position);
+		}
 		else 
+		{
 			tempPlayers = database.getPlayersByPosition(position);
+		}
 		
 		// sort players by ranking
 		if (tempPlayers != null)
@@ -191,8 +202,8 @@ public class FantasyDraft {
 	public static void showMenu() {
 		//finish filling in later
 		System.out.println("Options:");
-		System.out.println("ODRAFT: Draft player to specified team");
-		System.out.println("IDRAFT: Draft player to own team");
+		System.out.println("ODRAFT \"playername\" leagueMember: Draft player to specified team");
+		System.out.println("IDRAFT \"playername\": Draft player to own team");
 		System.out.println("OVERALL: View ranking for players in given (non-pitcher) position");
 		System.out.println("POVERALL: View ranking pr pitchers");
 		System.out.println("TEAM: View roster of given team");
@@ -317,8 +328,7 @@ public class FantasyDraft {
 			case "help":
 				showMenu();
 				break;
-		
-		
+
 			default: System.out.println("Invalid command. Type HELP to see available commands.");
 		}
 		
