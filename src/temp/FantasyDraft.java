@@ -32,6 +32,8 @@ public class FantasyDraft {
 		FantasyTeam leagueC = new FantasyTeam('C');
 		FantasyTeam leagueD = new FantasyTeam('D');
 		
+		
+		
 		// run menu
 		while(true)
 		{
@@ -40,6 +42,11 @@ public class FantasyDraft {
 			command = key.nextLine();
 			recieveCommand(command, leagueA, leagueB, leagueC, leagueD);
 		}
+	}
+	
+	// returns team object (for testing purposes)
+	public FantasyTeam getTeam(FantasyTeam team) {
+		return team;
 	}
 
 	/** Drafts a player to the given league member */

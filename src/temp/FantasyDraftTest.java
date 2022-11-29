@@ -13,12 +13,21 @@ import org.junit.Test;
  */
 public class FantasyDraftTest {
 
+	FantasyDraft testDraft  = new FantasyDraft();
+	
+	String playerName ="";
+	String league ="memberB";
+	
 	@Before
 	public void setUp() throws Exception {
+		
 	}
 
 	@Test
 	public void testoDraft() {
+		testDraft.oDraft(playerName, 'B');
+		assertEquals(playerName,);
+		
 		fail("Not yet implemented");
 	}
 	
