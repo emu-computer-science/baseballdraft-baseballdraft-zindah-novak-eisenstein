@@ -55,7 +55,7 @@ public class FantasyTeam {
 			{
 				teamPlayers.put(positions[7 + numP], player);
 			    name = player.getName() + " " + player.getLast();
-			    draftOrder.add(counter, player.getName());
+			    draftOrder.add(counter, name);
 			    name = " ";
 			    counter++;
 			    
@@ -70,7 +70,7 @@ public class FantasyTeam {
 		{
 			teamPlayers.put(player.getPosition(), player);
 			name = player.getName() + " " + player.getLast();
-			draftOrder.add(counter, player.getName());
+			draftOrder.add(counter, name);
 			name = " ";
 			counter++;
 		
