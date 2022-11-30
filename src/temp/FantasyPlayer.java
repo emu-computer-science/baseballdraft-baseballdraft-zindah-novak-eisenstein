@@ -1,6 +1,7 @@
 package temp;
 
 import java.util.Comparator;
+import java.util.HashMap;
 /**
  * FantasyPlayer.java class represents a fantasy baseball player
  * 
@@ -15,16 +16,17 @@ public class FantasyPlayer {
 	private String lastName;
 	private String position;
 	private String team;
+	private HashMap<String, Double> stats;
 	private double ranking;
-
+	
 	/** Construct a player with the given values */
 	public FantasyPlayer(String firstName, String lastName, String position, 
-			String team, double ranking) {
+			String team, HashMap<String, Double> stats) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.position = position;
+		this.position = position.toUpperCase();
 		this.team = team;
-		this.ranking = ranking;
+		this.stats = stats;
 	}
 
 	/** Get player position */
@@ -46,11 +48,21 @@ public class FantasyPlayer {
 	public double getRanking() {
 		return this.ranking;
 	}
+	
+	/** set player ranking */
+	public void setRanking(double rank) {
+		this.ranking = rank;
+	}
+	
+	public double getStat(String data) {
+		double v = stats.get(data);
+		return v;
+	}
 
 	/** Return a string representing the player */
 	@Override 
 	public String toString() {
-		return firstName + " " + lastName + " " + team + " " + position + " " + ranking;
+		return String.format("%" + (-10) + "s", firstName) + "\t" + String.format("%" + (-10) + "s", lastName) + "\t" + team + "\t" + position + "\t" + ranking;
 	}
 
 }
@@ -65,6 +77,6 @@ class playerComparator implements Comparator<FantasyPlayer>
 {
     public int compare(FantasyPlayer p1, FantasyPlayer p2)
     {
-        return p1.getRanking() > p2.getRanking() ? 1 : -1;
+        return p1.getRanking() > p2.getRanking() ? -1 : 1;
     }
 }
