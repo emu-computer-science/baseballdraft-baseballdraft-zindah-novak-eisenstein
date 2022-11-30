@@ -16,7 +16,7 @@ public class FantasyTeam {
 	private String[] positions = { "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "P1", "P2", "P3", "P4", "P5"};
 	private char League;
 	private int numP = 0;
-	private LinkedHashMap<String,FantasyPlayer> teamPlayers;
+	public LinkedHashMap<String,FantasyPlayer> teamPlayers;
 
 	/** Constructor an empty team */
 	public FantasyTeam(char league) {
