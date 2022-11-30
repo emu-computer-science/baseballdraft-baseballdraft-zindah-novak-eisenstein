@@ -15,7 +15,7 @@ public class FantasyDraftTest {
 
 	FantasyDraft testDraft  = new FantasyDraft();
 	
-	String playerName ="";
+	String playerName ="Verlander";
 	String league ="memberB";
 	
 	@Before
@@ -35,7 +35,11 @@ public class FantasyDraftTest {
 	
 	@Test
 	public void testiDraft() {
-		fail("Not yet implemented");
+		FantasyTeam data = new FantasyTeam('A');
+		
+		assertNull(data.getTeamPlayers().get(playerName));
+		testDraft.oDraft(playerName, data);
+		assertNotNull(data.getTeamPlayers().get(playerName));
 		
 	}
 	
