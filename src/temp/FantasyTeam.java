@@ -89,4 +89,10 @@ public class FantasyTeam {
 		}
 		return team;
 	}
+	public String draftOrderString()
+	{
+		  String order = " ";
+		 order = teamPlayers.toString();
+	     return order;
+	}
 }

@@ -134,6 +134,7 @@ public class FantasyDraft {
 	
 	/** prints out given team roster in order of draft*/
 	public static void stars(FantasyTeam leagueMember) {
+		System.out.println(leagueMember.draftOrderString());
 		//Same as TEAM, but the ordering of the players matches the 
 		//order in which they were drafted overall
 	}
