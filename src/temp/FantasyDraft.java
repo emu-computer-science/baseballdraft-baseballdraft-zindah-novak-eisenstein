@@ -133,7 +133,7 @@ public class FantasyDraft {
 	}
 	
 	/** prints out given team roster in order of draft*/
-	public static void stars(char leagueMember) {
+	public static void stars(FantasyTeam leagueMember) {
 		//Same as TEAM, but the ordering of the players matches the 
 		//order in which they were drafted overall
 	}
@@ -278,6 +278,7 @@ public class FantasyDraft {
 		System.out.println("RESTORE: Restore saved file");
 		System.out.println("EVALFUN: ");
 		System.out.println("PEVALFUN: ");
+		System.out.println("WEIGHT: ");
 		System.out.println("HELP: See available commands");
 		System.out.println("QUIT: Quit program");
 	}
@@ -369,7 +370,21 @@ public class FantasyDraft {
 			case "stars":
 				System.out.println("Enter participant letter");
 				leagueMember = keyboard.next().charAt(0);
-				stars(leagueMember);
+				if(leagueMember == 'A') {
+					stars(leagueA);
+				}
+				else if(leagueMember == 'B')
+				{
+					stars(leagueB);
+				}
+				else if(leagueMember == 'C')
+				{
+					stars(leagueC);
+				}
+				else if(leagueMember == 'D')
+				{
+					stars(leagueD);
+				}
 				break;
 				
 			case "save":
