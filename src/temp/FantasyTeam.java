@@ -1,6 +1,5 @@
 package temp;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
@@ -13,10 +12,11 @@ import java.util.LinkedHashMap;
 public class FantasyTeam {
 	
 	/**Data Members*/
-	private String[] positions = { "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "P1", "P2", "P3", "P4", "P5"};
 	private char League;
 	private int numP = 0;
-	public LinkedHashMap<String,FantasyPlayer> teamPlayers;
+	private String[] positions = { "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "P1", "P2", "P3", "P4", "P5"};
+
+	private LinkedHashMap<String,FantasyPlayer> teamPlayers; //string name, player
 
 	/** Constructor an empty team */
 	public FantasyTeam(char league) {
@@ -28,6 +28,12 @@ public class FantasyTeam {
 	public FantasyTeam(LinkedHashMap<String, FantasyPlayer> teamPlayers, char league) {
 		this.teamPlayers = teamPlayers;
 		this.League = league;
+	}
+
+	
+	
+	public LinkedHashMap<String, FantasyPlayer> getTeamPlayers() {
+		return teamPlayers;
 	}
 
 	/** Draft player to the team */
@@ -51,11 +57,6 @@ public class FantasyTeam {
 
 		return true;
 	}
-	
-	/** Remove player from the team */
-	public void removePlayer(FantasyPlayer player) {
-		teamPlayers.remove(player.getPosition(), player);
-	}
 
 	/** Check if a team already has a player */
 	public boolean hasPlayer(FantasyPlayer player) {
@@ -75,10 +76,12 @@ public class FantasyTeam {
 		return League;
 	}
 	
+	
+	
 	@Override
 	public String toString() {
 		String team = "";
-		
+
 		for (String pos : positions)
 		{
 			if (teamPlayers.get(pos) != null)

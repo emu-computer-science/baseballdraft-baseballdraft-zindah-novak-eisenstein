@@ -9,9 +9,13 @@ import java.util.HashMap;
  *
  */
 public class FantasyDatabase {
+	
 	/** Data members */
 	private HashMap<String, FantasyPlayer> players = new HashMap<>();
 	private HashMap<String, FantasyPlayer> drafted = new HashMap<>();
+	private HashMap<String, Double> posWeights = new  HashMap<>(); 
+	private String evalE = "AVG";
+	private String pEvalE = "IP";
 	
 	/** Construct an empty database */
 	public FantasyDatabase()
@@ -47,9 +51,8 @@ public class FantasyDatabase {
 	public boolean isAvailable(FantasyPlayer p)
 	{
 		if (drafted.containsValue(p))
-		{
 			return false;
-		}
+		
 		return true;
 	}
 	
@@ -59,18 +62,47 @@ public class FantasyDatabase {
 		ArrayList<FantasyPlayer> playersInPosition = new ArrayList<>();
 
 		for (FantasyPlayer p : players.values()) {
-			if (p.getPosition().equals(position) || (position.equals("hitters") && (!p.getPosition().equals("P")))
-					|| (position.equals("pitchers") && p.getPosition().equals("P")))
+			if (p.getPosition().equals(position) || (position.toUpperCase().equals("HITTERS") && (!p.getPosition().equals("P")))
+					|| (position.toUpperCase().equals("PITCHERS") && p.getPosition().equals("P")))
 				playersInPosition.add(p);
 		}
 
 		return playersInPosition;
 	}
 
-	/** record that a player was drafted */
+	/** record that a player was drafted to a team*/
 	public void addDrafted(FantasyPlayer p)
 	{
 		drafted.put(p.getName(), p);
+	}
+	
+	/** change position weight */
+	public void setPosWeight(String pos, double weight)
+	{
+		posWeights.put(pos, weight);
+	}
+	
+	/** get position weight */
+	public double getPosWeight(String pos)
+	{
+		return posWeights.get(pos);
+	}
+
+	public void setEvalFun(String string) {
+		evalE = string;
+	}
+	
+	public String getEvalFun() {
+		return evalE;
+		
+	}
+	
+	public void setPEvalFun(String string) {
+		pEvalE = string;
+	}
+	
+	public String getPEvalFun() {
+		return pEvalE;
 	}
 	
 	/** Return a string representing the database */
