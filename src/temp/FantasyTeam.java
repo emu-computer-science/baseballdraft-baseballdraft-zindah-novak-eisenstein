@@ -1,5 +1,6 @@
 package temp;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
@@ -15,6 +16,9 @@ public class FantasyTeam {
 	private char League;
 	private int numP = 0;
 	private String[] positions = { "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "P1", "P2", "P3", "P4", "P5"};
+	private String name = " ";
+	private ArrayList<String> draftOrder = new ArrayList<String>();
+	private int counter = 0;
 
 	private LinkedHashMap<String,FantasyPlayer> teamPlayers; //string name, player
 
@@ -48,14 +52,30 @@ public class FantasyTeam {
 			numP += 1;
 			
 			if (numP <= 5)
+			{
 				teamPlayers.put(positions[7 + numP], player);
+			    name = player.getName() + " " + player.getLast();
+			    draftOrder.add(counter, player.getName());
+			    name = " ";
+			    counter++;
+			    
+			}	
 			else
+			{
 				return false;
+			}
+				
 		} 
 		else
+		{
 			teamPlayers.put(player.getPosition(), player);
-
-		return true;
+			name = player.getName() + " " + player.getLast();
+			draftOrder.add(counter, player.getName());
+			name = " ";
+			counter++;
+		
+		}
+          return true;
 	}
 
 	/** Check if a team already has a player */
@@ -92,7 +112,14 @@ public class FantasyTeam {
 	public String draftOrderString()
 	{
 		  String order = " ";
-		 order = teamPlayers.toString();
+		  int counter = 1;
+		  for(int x = 0; x < draftOrder.size(); x++)
+		  {
+			  order = order + counter + ". " + draftOrder.get(x) + "\n";
+			  counter++;
+		  }
+		 
+		 
 	     return order;
 	}
 }
