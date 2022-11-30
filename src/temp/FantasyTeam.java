@@ -30,6 +30,12 @@ public class FantasyTeam {
 		this.League = league;
 	}
 
+	
+	
+	public LinkedHashMap<String, FantasyPlayer> getTeamPlayers() {
+		return teamPlayers;
+	}
+
 	/** Draft player to the team */
 	public boolean addPlayer(FantasyPlayer player) {
 

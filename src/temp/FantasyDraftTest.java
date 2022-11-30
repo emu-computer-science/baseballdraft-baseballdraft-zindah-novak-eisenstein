@@ -25,10 +25,12 @@ public class FantasyDraftTest {
 
 	@Test
 	public void testoDraft() {
-		testDraft.oDraft(playerName, 'B');
-		assertEquals(playerName,);
+		FantasyTeam data = new FantasyTeam('B');
 		
-		fail("Not yet implemented");
+		assertNull(data.getTeamPlayers().get(playerName));
+		testDraft.oDraft(playerName, data);
+		assertNotNull(data.getTeamPlayers().get(playerName));
+		
 	}
 	
 	@Test
