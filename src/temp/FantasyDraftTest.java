@@ -29,7 +29,7 @@ public class FantasyDraftTest {
 		FantasyTeam data = new FantasyTeam('B');
 		
 		assertNull(data.getTeamPlayers().get(playerName));
-		testDraft.oDraft(playerName, data);
+		testDraft.oDraft(playerName, data.getLeague());
 		assertNotNull(data.getTeamPlayers().get(playerName));
 		
 	}
@@ -39,7 +39,7 @@ public class FantasyDraftTest {
 		FantasyTeam data = new FantasyTeam('A');
 		
 		assertNull(data.getTeamPlayers().get(playerName));
-		testDraft.oDraft(playerName, data);
+		testDraft.oDraft(playerName, data.getLeague());
 		assertNotNull(data.getTeamPlayers().get(playerName));
 		
 	}
@@ -50,7 +50,6 @@ public class FantasyDraftTest {
 		FantasyTeam data = new FantasyTeam('B');
 		testDraft.overall("hitter", data);
 		//assertNotNull();
-		
 	}
 	
 	@Test

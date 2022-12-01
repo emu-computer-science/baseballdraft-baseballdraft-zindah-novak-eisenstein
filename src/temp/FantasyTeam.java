@@ -2,6 +2,7 @@ package temp;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 /**
  * FantasyTeam.java class represents a fantasy baseball team
@@ -33,8 +34,6 @@ public class FantasyTeam {
 		this.teamPlayers = teamPlayers;
 		this.League = league;
 	}
-
-	
 	
 	public LinkedHashMap<String, FantasyPlayer> getTeamPlayers() {
 		return teamPlayers;
@@ -109,17 +108,18 @@ public class FantasyTeam {
 		}
 		return team;
 	}
+	
 	public String draftOrderString()
 	{
-		  String order = " ";
-		  int counter = 1;
-		  for(int x = 0; x < draftOrder.size(); x++)
-		  {
-			  order = order + counter + ". " + draftOrder.get(x) + "\n";
-			  counter++;
-		  }
+		  String orderedTeam = "";
+
+		  Set <String> keys = teamPlayers.keySet();
+		  
+		  for (String key : keys) {
+			  if (teamPlayers.get(key) != null)
+					orderedTeam += key + ": " + teamPlayers.get(key).getName() + " " + teamPlayers.get(key).getLast() + "\n";
+		}
 		 
-		 
-	     return order;
+	     return orderedTeam;
 	}
 }
