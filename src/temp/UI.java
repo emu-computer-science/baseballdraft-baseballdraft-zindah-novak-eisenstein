@@ -32,56 +32,41 @@ public class UI {
 		commandName = commandName.toLowerCase();
 		
 		switch(commandName) {
+		
 		case "odraft":
+			draft.draftPlayer(command, "o");
+			break;
+			
 		case "idraft":
-			draft.draft(command);
+			draft.draftPlayer(command, "i");
 			break;
 			
 		case "overall":
-//			// check if there is a second command after overall
-//			if (command.split(" ").length == 2)
-//				 secondCommand = command.split(" ")[1];
-//			
-//			if (!secondCommand.toUpperCase().equals("P"))
-//				overall(secondCommand, fantasyLeagues.get('A'));
-//			else
-//				System.out.println("Overall doesn't print pitchers");
-			draft.overall(command);
+			draft.overallHelper(command, "");
 			break;
 			
 		case "poverall":
-//			overall("pitchers", fantasyLeagues.get('A'));
-			draft.poverall(command);
+			draft.overallHelper(command, "P");
 			break;
+			
 		case "team":
-//			System.out.println("Enter participant letter");
-//			leagueMember = keyboard.next().charAt(0);
-//			char leagueMemberCap = Character.toUpperCase(leagueMember);
-//			
-//			team(fantasyLeagues.get(leagueMemberCap));
-			draft.team(command);
+			draft.team(command, "team");
 			break;
 		case "stars":
-//			System.out.println("Enter participant letter");
-//			leagueMember = keyboard.next().charAt(0);
-//			char member = Character.toUpperCase(leagueMember);
-//			if(member == 'A' || member == 'B' || member == 'C' || member == 'D') {
-//				stars(fantasyLeagues.get(leagueMember));
-//			}
-			draft.stars(command);
+			draft.team(command, "stars");
 			break;
 		case "save":
 //			System.out.println("Enter file name");
 //			secondCommand = keyboard.nextLine();
 //			save(secondCommand);
-			draft.save(command);
+//			draft.save(command);
 			break;
 
 		case "restore":
 //			System.out.println("Enter file name");
 //			secondCommand = keyboard.nextLine();
 //			restore(secondCommand);
-			draft.restore(command);
+//			draft.restore(command);
 			break;
 			
 		case "evalfun": 
@@ -89,28 +74,26 @@ public class UI {
 //			String exp = command.split(" ")[1];
 //			
 //			database.setEvalFun("e"); //////////////////////////CHANGE THIS AFTER IMPLEMENTING
-			draft.evalFun(command);
+//			draft.evalFun(command);
 			break;
 			
 		case "pevalfun":
 			//pEvalFun();
-			draft.pEvalFun(command);
+//			draft.pEvalFun(command);
 			break;
 		
 		case "weight":
-//			// split the input string into command and inputs
-//			String[] commandArr = command.split(" ");
-//			String[] c = Arrays.copyOfRange(commandArr, 1, commandArr.length);
-//			// call the weight function
-//			weight(c);
 			draft.weight(command);
 			break; 
+			
 		case "help":
 			help();
 			break;
 
 		case "quit":
+			command.close();
 			return false;
+			
 		default:
 			 System.out.println("Invalid command. Type HELP to see available commands.");
 		}

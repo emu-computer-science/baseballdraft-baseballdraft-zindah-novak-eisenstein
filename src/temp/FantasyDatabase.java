@@ -63,7 +63,7 @@ public class FantasyDatabase {
 
 		for (FantasyPlayer p : players.values()) {
 			if (p.getPosition().equals(position) || (position.toUpperCase().equals("HITTERS") && (!p.getPosition().equals("P")))
-					|| (position.toUpperCase().equals("PITCHERS") && p.getPosition().equals("P")))
+					|| (position.toUpperCase().equals("P") && p.getPosition().equals("P")))
 				playersInPosition.add(p);
 		}
 

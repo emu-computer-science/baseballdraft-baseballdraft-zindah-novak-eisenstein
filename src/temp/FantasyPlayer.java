@@ -39,6 +39,11 @@ public class FantasyPlayer {
 		return this.firstName;
 	}
 
+	/** Get player first name */
+	public String getFullName() {
+		return this.lastName + ", " + firstName.charAt(0);
+	}
+
 	/** Get player last name */
 	public String getLast() {
 		return this.lastName;

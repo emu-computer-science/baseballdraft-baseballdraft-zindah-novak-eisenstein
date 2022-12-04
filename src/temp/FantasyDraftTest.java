@@ -2,7 +2,10 @@ package temp;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
+import java.util.HashMap;
+import java.util.Scanner;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 /**
  * FantasyDraftTest.java class tests the main method FantasyDraft
@@ -13,59 +16,70 @@ import org.junit.Test;
  */
 public class FantasyDraftTest {
 
-	FantasyDraft testDraft  = new FantasyDraft();
-	
-	String playerName ="Alvarez";
-	String pitcherName = "Verlander";
+	static FantasyDraft testDraft  = new FantasyDraft();
+	static FantasyTeam teamA;
+	static FantasyTeam teamB;
+	static FantasyTeam teamC;
+	static FantasyTeam teamD;
+
+	String playerName ="Alvarez, Y";
+	String pitcherName = "Verlander, J";
 	String league ="memberB";
 	
-	@Before
-	public void setUp() throws Exception {
-		
+	Scanner command;
+
+	@BeforeClass
+	public static void setUp() throws Exception {
+		testDraft.initDatabase();
+		teamA = testDraft.getTeam('A');
+		teamB = testDraft.getTeam('B');
+		teamC = testDraft.getTeam('C');
+		teamD = testDraft.getTeam('D');
 	}
-// throws "No Such Player error"
+	
 	@Test
 	public void testoDraft() {
-		FantasyTeam data = new FantasyTeam('B');
+		assertNull(teamB.getPlayer(pitcherName));
+
+		command = new Scanner(" \"" + pitcherName + "\" B");
+
+		testDraft.draftPlayer(command, "o");
 		
-		assertNull(data.getTeamPlayers().get(playerName));
-		testDraft.oDraft(playerName, data.getLeague());
-		assertNotNull(data.getTeamPlayers().get(playerName));
-		
+		assertNotNull(teamB.getPlayer(pitcherName));
 	}
-	// throws "No Such Player error"	
+	
 	@Test
 	public void testiDraft() {
-		FantasyTeam data = new FantasyTeam('A');
+
+		assertNull(teamA.getPlayer(playerName));
 		
-		assertNull(data.getTeamPlayers().get(playerName));
-		testDraft.oDraft(playerName, data.getLeague());
-		assertNotNull(data.getTeamPlayers().get(playerName));
+		command = new Scanner("\"" + playerName + "\"");
 		
+		testDraft.draftPlayer(command, "i");
+		
+		assertNotNull(teamA.getPlayer(playerName));
 	}
 	
 	@Test
 	public void testOverall() {//Not sure how to test this with JUnit
 		//Drosn't seem to be printing to begin with 
 		FantasyTeam data = new FantasyTeam('B');
-		testDraft.overall("hitter", data);
+		testDraft.overall("hitter");
 		//assertNotNull();
 	}
 	
 	@Test
 	public void testpOverall() {//Not sure how to test this with JUnit
 		FantasyTeam data = new FantasyTeam('A');
-		testDraft.overall("pitchers", data); //not actually a function in the driver, just calls overall("pitchers", leagueA);
+		testDraft.overall("pitchers"); //not actually a function in the driver, just calls overall("pitchers", leagueA);
 	}
 	
 	@Test
 	public void testTeam() {//Not sure how to test this with JUnit
-		FantasyTeam data = new FantasyTeam('A');
-		//assertNull();
-		testDraft.team(data);
-		testDraft.oDraft(playerName, data);
-		//assertNotNull();
-		testDraft.team(data);
+
+		command = new Scanner("C");
+		
+		testDraft.team(command, "team");
 	}
 	
 	@Test
@@ -82,6 +96,11 @@ public class FantasyDraftTest {
 	@Test
 	public void testPEvalFun() {//What does function this even do? 
 		//assertEquals();
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void testWeight() {//What does function this even do? 
 		fail("Not yet implemented");
 	}
 

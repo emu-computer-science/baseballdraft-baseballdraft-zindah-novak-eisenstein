@@ -3,7 +3,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -17,10 +16,11 @@ import java.util.Scanner;
 public class FantasyDraft {
 	
 	/** Data members */
-	private FantasyDatabase database = new FantasyDatabase();
+	public FantasyDatabase database = new FantasyDatabase();
 	private HashMap<Character, FantasyTeam> fantasyLeagues = new HashMap<>();
 	private boolean empty = true;
 
+	/* check if this class object has been initialized */
 	public boolean isNew() {
 		return empty;
 	}
@@ -28,11 +28,11 @@ public class FantasyDraft {
 	public void setNew(boolean newDraft) {
 		empty = newDraft;
 	}
-	// returns team object (for testing purposes)
-	public FantasyTeam getTeam(FantasyTeam team) {
-		return team;
-	}
 
+	public FantasyTeam getTeam(char team) {
+		return fantasyLeagues.get(team);
+	}
+	
 	/** Drafts a player to the given league member */
 	public void oDraft(String playerName, char league) {
 		
@@ -52,17 +52,43 @@ public class FantasyDraft {
 			// add player to the league and print confirmation
 			else if (!(team.hasPosition(tempPlayer.getPosition())))
 			{	
-				if (team.addPlayer(tempPlayer))
-				{
-					database.addDrafted(tempPlayer);
-					System.out.println(tempPlayer.getName() + " has been drafted to team " + league);
-				}
-				else
-					System.out.println("The " + tempPlayer.getPosition() + " position is full");
+				database.addDrafted(tempPlayer);
+				fantasyLeagues.get(league).addPlayer(tempPlayer);
+				System.out.println(tempPlayer.getName() + " has been drafted to team " + league);
 			}
 			else
 				System.out.println("You already have a player for position " + tempPlayer.getPosition());
 		}
+	}
+	
+	/* odraft/idraft helper */
+	public void draftPlayer(Scanner command, String draftType) {
+		
+		command.useDelimiter("\"");
+		
+		String commands = "";
+		String playerName = "";
+		String leagueLetter = "";
+		int league = 3;
+		int count = 0;
+		
+		// get player name
+		while (command.hasNext()) {
+			count++;
+			if (count < league)
+				commands += command.next() + " ";
+			else if (count == league)
+				leagueLetter = command.next().trim();
+		}
+
+		playerName = commands.trim();
+
+		// call draft function
+		if (draftType.equals("o") && !leagueLetter.equals(""))
+			oDraft(playerName, leagueLetter.toUpperCase().charAt(0));
+
+		else if (draftType.equals("i"))
+			oDraft(playerName, 'A');	
 	}
 	
 	/* Check if a player exists / is free to be drafted */
@@ -76,28 +102,18 @@ public class FantasyDraft {
 		
 		return "";
 	}
-	
-	/* odraft/idraft helper */
-	public void draft(Scanner command) {
-		command.useDelimiter("\"");
-		String playerName = command.next();
-		char league = command.next().trim().charAt(0);
 		
-		if (league == ' ')
-			oDraft(playerName, 'A');
-		else
-			oDraft(playerName, Character.toUpperCase(league));
-	}
-
+	/** Prints out players of the given positions */
+	public void overall(String position) {
 		
-	/** Prints out players of the given non-pitching positions */
-	public void overall(String position, FantasyTeam memberA) {
 		ArrayList<FantasyPlayer> tempPlayers = null;
+		FantasyTeam teamA = fantasyLeagues.get('A');
+		String heading ="\nFirst     \tLast\t\tTeam\tPos\tRank\n";
 		
 		// get player rankings in given position
-		if (position == " ")
+		if (position == "")
 			tempPlayers = database.getPlayersByPosition("hitters");
-		else if (memberA.hasPosition(position.toUpperCase()))
+		else if (teamA.hasPosition(position.toUpperCase()))
 			System.out.println("You already have a player for position " + position);
 		else 
 			tempPlayers = database.getPlayersByPosition(position.toUpperCase());
@@ -106,17 +122,13 @@ public class FantasyDraft {
 		if (tempPlayers != null)
 		{
 			// print headings
-			System.out.println("_____________________________________________________\nFirst     "
-					+ "\tLast          \tTeam\tPos\tRank\n_______________________________" +
-					"______________________");
+			System.out.println("_____".repeat(11) + heading + "_____".repeat(11));
 			
 			// loop through relevant players and update ranking accordingly
 			for (FantasyPlayer p : tempPlayers)
 			{
 				if (p.getPosition().contains("P"))
-				{
 					p.setRanking(pEvalFun(p));
-				}
 				else
 					p.setRanking(database.getPosWeight(p.getPosition()) * evalFun(p));
 			}
@@ -127,23 +139,48 @@ public class FantasyDraft {
 			// loop through and print out sorted array of available players
 			for (FantasyPlayer p : tempPlayers)
 			{
-				if((!memberA.hasPosition(p.getPosition())) && (database.isAvailable(p)))
+				if((!teamA.hasPosition(p.getPosition())) && (database.isAvailable(p)))
 					System.out.println(p);
 			}
 		}
 	}
 	
-	/** prints out given team roster in position order */
-	public void team (FantasyTeam leagueMember) {
-		//print roster for given member
-		System.out.println(leagueMember.toString());	
+	public void overallHelper(Scanner command, String pos) {
+		command.useDelimiter(" ");
+
+		String position = "";
+		
+		if (pos.toUpperCase().equals("P"))
+			overall(pos);
+		
+		else if (command.hasNext())
+		{
+			position = command.next();
+			
+			if (!position.equals("P"))
+				overall(position);
+			else
+				System.out.println("Overall doesn't print pitchers");
+		}
+		else 
+			overall("");
 	}
 	
-	/** prints out given team roster in order of draft*/
-	public static void stars(FantasyTeam leagueMember) {
-		System.out.println(leagueMember.draftOrderString());
-		//Same as TEAM, but the ordering of the players matches the 
-		//order in which they were drafted overall
+	/** prints out given team roster in given order (stars or team) */
+	public void team(Scanner command, String order) {
+		char team = ' ';
+		String teamPlayers = "";
+
+		if (command.hasNext())
+			team = command.next().charAt(0);
+		
+		//print roster for given member
+		if (order.equals("team")) 
+			teamPlayers = fantasyLeagues.get(Character.toUpperCase(team)).draftOrderString();
+		else if (order.equals("stars"))
+			teamPlayers = fantasyLeagues.get(Character.toUpperCase(team)).toString();	
+		
+		System.out.println(teamPlayers);
 	}
 	
 	/** save team data */
@@ -172,20 +209,28 @@ public class FantasyDraft {
 	}
 	
 	/** weight position importance */
-	public void weight (String[] arr) {
+	public void weight (Scanner command) {
 		// user data
-		String position = "";
-		int weight = 0;
+		String position = "", weight = "";
+		double positionWeight = 0;
 		
 		// loop through the input array and change position weight
-		for(int i = 0; i < arr.length - 1; i+=2) {
+		while (command.hasNext()) {
+			position = command.next();
 			
-			position = arr[i];
+			if (command.hasNext())
+				weight = command.next();
+			else
+				return;
 			
 			// validate input
 			try 
 			{
-				weight = Integer.parseInt(arr[i+1]);
+				positionWeight = Double.parseDouble(weight);
+				if (positionWeight > 0) {
+					database.setPosWeight(position, positionWeight);
+					System.out.println(position + " weight has been updated to " + database.getPosWeight(position));
+				}
 			}
 			catch (Exception e) 
 			{
@@ -193,9 +238,8 @@ public class FantasyDraft {
 			+ "(ex: weight 1b 1 2b 4)");
 			}
 			
-			// set position weight in database
-			if (weight > 0)
-				database.setPosWeight(position, weight);
+			positionWeight = 0;
+			position = "";
 		}
 	}
 	
@@ -215,9 +259,9 @@ public class FantasyDraft {
 		String line = "";
 		
 		fantasyLeagues.put('A', new FantasyTeam('A'));
-		fantasyLeagues.put('B', new FantasyTeam('A'));
-		fantasyLeagues.put('C', new FantasyTeam('A'));
-		fantasyLeagues.put('D', new FantasyTeam('A'));
+		fantasyLeagues.put('B', new FantasyTeam('B'));
+		fantasyLeagues.put('C', new FantasyTeam('C'));
+		fantasyLeagues.put('D', new FantasyTeam('D'));
 		
 		// initialize the weight of every position to 1
 		for (String position : positions) {
