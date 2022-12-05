@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import java.util.Scanner;
  * @version (11-18-2022)
  *
  */
-public class FantasyDraft implements Serializable {
+public class FantasyDraft {
 	
 	/** Data members */
 	public FantasyDatabase database = new FantasyDatabase();
