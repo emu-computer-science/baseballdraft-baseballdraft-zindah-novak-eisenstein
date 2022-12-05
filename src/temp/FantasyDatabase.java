@@ -1,4 +1,5 @@
 package temp;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 /**
@@ -8,7 +9,7 @@ import java.util.HashMap;
  * @version (11-18-2022)
  *
  */
-public class FantasyDatabase {
+public class FantasyDatabase implements Serializable {
 	
 	/** Data members */
 	private HashMap<String, FantasyPlayer> players = new HashMap<>();

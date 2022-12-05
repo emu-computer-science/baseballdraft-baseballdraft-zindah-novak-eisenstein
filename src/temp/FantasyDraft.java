@@ -1,11 +1,18 @@
 package temp;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
+
 /**
  * FantasyDraft.java class implements a fantasy baseball draft
  * 
@@ -13,27 +20,23 @@ import java.util.Scanner;
  * @version (11-18-2022)
  *
  */
-public class FantasyDraft {
+public class FantasyDraft implements Serializable {
 	
 	/** Data members */
 	public FantasyDatabase database = new FantasyDatabase();
 	private HashMap<Character, FantasyTeam> fantasyLeagues = new HashMap<>();
-	private boolean empty = true;
 
-	/* check if this class object has been initialized */
-	public boolean isNew() {
-		return empty;
-	}
-	
-	public void setNew(boolean newDraft) {
-		empty = newDraft;
-	}
-
+	/* return team */
 	public FantasyTeam getTeam(char team) {
 		return fantasyLeagues.get(team);
 	}
 	
-	/** Drafts a player to the given league member */
+	/**
+	 * Drafts a player to a given league member
+	 * 
+	 * @param playerName
+	 * @param league
+	 */
 	public void oDraft(String playerName, char league) {
 		
 		// temporary test player/team
@@ -103,7 +106,11 @@ public class FantasyDraft {
 		return "";
 	}
 		
-	/** Prints out players of the given positions */
+	/**
+	 * Prints out players of the given positions
+	 * 
+	 * @param position
+	 */
 	public void overall(String position) {
 		
 		ArrayList<FantasyPlayer> tempPlayers = null;
@@ -166,7 +173,11 @@ public class FantasyDraft {
 			overall("");
 	}
 	
-	/** prints out given team roster in given order (stars or team) */
+	/**
+	 * prints out given team roster in given order (stars or team)
+	 * @param command
+	 * @param order
+	 */
 	public void team(Scanner command, String order) {
 		char team = ' ';
 		String teamPlayers = "";
@@ -182,15 +193,63 @@ public class FantasyDraft {
 		
 		System.out.println(teamPlayers);
 	}
-	
-	/** save team data */
-	public static void save (String filename) {
-		
-	}
-	
+
 	/** quit program */
 	public static void quit() {
 		System.exit(0);
+	}
+	
+
+	/**
+	 * function to save draft data
+	 * 
+	 * @param saveDraft
+	 */
+	public void save() {
+		Scanner in = new Scanner(System.in);
+
+		System.out.println("Enter File Name: ");
+		String fileName = in.next();
+
+		try {
+			// create outputStream object
+			FileOutputStream out = new FileOutputStream(fileName);
+			ObjectOutputStream objectOut = new ObjectOutputStream(out);
+			
+			objectOut.writeObject(database);
+			objectOut.writeObject(fantasyLeagues);
+			
+			System.out.println("Fantasy draft state saved to file.");
+			objectOut.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// testing to see if save works
+	public void restore () {
+		Scanner in = new Scanner(System.in);
+		
+		System.out.println("Enter File Name: ");
+		String fileName = in.next();
+		
+		try
+		{
+			FileInputStream fin = new FileInputStream(fileName);
+			ObjectInputStream oin = new ObjectInputStream(fin);
+			database = (FantasyDatabase) oin.readObject();
+			fantasyLeagues = (HashMap<Character, FantasyTeam>) oin.readObject();
+			
+			oin.close();
+			fin.close();
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	/** restore session */

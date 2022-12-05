@@ -1,54 +1,52 @@
 package temp;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class UI {
 	private boolean shouldRun = true;
-	private FantasyDraft draft;
-	
-	public UI (FantasyDraft newDraft){
+	private static FantasyDraft draft;
+
+	public UI(FantasyDraft newDraft) {
 		draft = newDraft;
 	}
-	
+
 	public void interactWithUser() {
-		
-		if (draft.isNew())
-			draft.initDatabase();
-		
 		Scanner input = new Scanner(System.in);
+
+		draft.initDatabase();
+
 		while (shouldRun) {
 			promptUser();
 			String userCommand = input.nextLine();
 			shouldRun = parseCommand(userCommand);
-			
 		}
+
 		input.close();
 	}
-	
+
 	private boolean parseCommand(String userCommand) {
 		Scanner command = new Scanner(userCommand);
 		String commandName = command.next();
 		commandName = commandName.toLowerCase();
-		
-		switch(commandName) {
-		
+
+		switch (commandName) {
+
 		case "odraft":
 			draft.draftPlayer(command, "o");
 			break;
-			
+
 		case "idraft":
 			draft.draftPlayer(command, "i");
 			break;
-			
+
 		case "overall":
 			draft.overallHelper(command, "");
 			break;
-			
+
 		case "poverall":
 			draft.overallHelper(command, "P");
 			break;
-			
+
 		case "team":
 			draft.team(command, "team");
 			break;
@@ -56,36 +54,30 @@ public class UI {
 			draft.team(command, "stars");
 			break;
 		case "save":
-//			System.out.println("Enter file name");
-//			secondCommand = keyboard.nextLine();
-//			save(secondCommand);
-//			draft.save(command);
+			draft.save();
 			break;
 
 		case "restore":
-//			System.out.println("Enter file name");
-//			secondCommand = keyboard.nextLine();
-//			restore(secondCommand);
-//			draft.restore(command);
+			draft.restore();
 			break;
-			
-		case "evalfun": 
+
+		case "evalfun":
 //			// get the evalfun expression
 //			String exp = command.split(" ")[1];
 //			
 //			database.setEvalFun("e"); //////////////////////////CHANGE THIS AFTER IMPLEMENTING
 //			draft.evalFun(command);
 			break;
-			
+
 		case "pevalfun":
-			//pEvalFun();
+			// pEvalFun();
 //			draft.pEvalFun(command);
 			break;
-		
+
 		case "weight":
 			draft.weight(command);
-			break; 
-			
+			break;
+
 		case "help":
 			help();
 			break;
@@ -93,9 +85,9 @@ public class UI {
 		case "quit":
 			command.close();
 			return false;
-			
+
 		default:
-			 System.out.println("Invalid command. Type HELP to see available commands.");
+			System.out.println("Invalid command. Type HELP to see available commands.");
 		}
 		return true;
 	}
@@ -117,9 +109,9 @@ public class UI {
 		System.out.println("HELP: See available commands");
 		System.out.println("QUIT: Quit program");
 	}
-		
+
 	private void promptUser() {
 		System.out.print("Enter a command: ");
-		
+
 	}
 }

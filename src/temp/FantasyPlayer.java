@@ -1,5 +1,6 @@
 package temp;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.HashMap;
 /**
@@ -9,7 +10,7 @@ import java.util.HashMap;
  * @version (11-18-2022)
  *
  */
-public class FantasyPlayer {
+public class FantasyPlayer implements Serializable {
 	
 	/** Data members */
 	private String firstName;

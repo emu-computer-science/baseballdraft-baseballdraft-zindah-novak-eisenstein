@@ -1,5 +1,6 @@
 package temp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Set;
@@ -11,7 +12,7 @@ import java.util.Set;
  * @version (11-18-2022)
  *
  */
-public class FantasyTeam {
+public class FantasyTeam implements Serializable {
 	
 	/**Data Members*/
 	private char League;
@@ -55,7 +56,6 @@ public class FantasyTeam {
 			    name = player.getName() + " " + player.getLast();
 			    name = " ";
 			    counter++;
-			    
 			}	
 			else
 				return false;
@@ -66,9 +66,7 @@ public class FantasyTeam {
 			name = player.getName() + " " + player.getLast();
 			name = " ";
 			counter++;
-		
 		}
-        
 		return true;
 	}
 
@@ -113,17 +111,17 @@ public class FantasyTeam {
 		return team;
 	}
 	
-	public String draftOrderString()
-	{
-		  String orderedTeam = "";
+	public String draftOrderString() {
+		String orderedTeam = "";
 
-		  Set <String> keys = teamPlayers.keySet();
-		  
-		  for (String key : keys) {
-			  if (teamPlayers.get(key) != null)
-					orderedTeam += key + ": " + teamPlayers.get(key).getName() + " " + teamPlayers.get(key).getLast() + "\n";
+		Set<String> keys = teamPlayers.keySet();
+
+		for (String key : keys) {
+			if (teamPlayers.get(key) != null)
+				orderedTeam += key + ": " + teamPlayers.get(key).getName() + " " + teamPlayers.get(key).getLast()
+						+ "\n";
 		}
-		 
-	     return orderedTeam;
+
+		return orderedTeam;
 	}
 }
