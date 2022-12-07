@@ -1,5 +1,3 @@
-//UNCOMMENT LINE 132
-
 package temp;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -131,8 +129,8 @@ public class FantasyDraft {
 		if (tempPlayers != null)
 		{
 			// print headings
-			//uNCOMMENT LATER
-			//System.out.println("_____".repeat(11) + heading + "_____".repeat(11));
+			
+			System.out.println("_____".repeat(11) + heading + "_____".repeat(11));
 			
 			// loop through relevant players and update ranking accordingly
 			for (FantasyPlayer p : tempPlayers)
