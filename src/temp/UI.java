@@ -83,6 +83,22 @@ public class UI {
 			break;
 
 		case "quit":
+			System.out.println("Would you like to save? (y/n) ");
+			boolean commandGiven = false;
+			while(!commandGiven) {
+			switch (command.next()) {
+			case "y":
+				draft.save();
+				commandGiven = true;
+				break;
+			case "n":
+				commandGiven = true;
+				break;
+			default:
+				System.out.println("Invalid command. Would you like to save? (y/n)");
+				break;
+			}
+			}
 			command.close();
 			return false;
 
