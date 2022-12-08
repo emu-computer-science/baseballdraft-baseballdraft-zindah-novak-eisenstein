@@ -2,6 +2,8 @@ package temp;
 
 import java.util.Scanner;
 
+import javax.script.ScriptException;
+
 public class UI {
 	private boolean shouldRun = true;
 	private static FantasyDraft draft;
@@ -10,7 +12,7 @@ public class UI {
 		draft = newDraft;
 	}
 
-	public void interactWithUser() {
+	public void interactWithUser() throws ScriptException {
 		Scanner input = new Scanner(System.in);
 
 		draft.initDatabase();
@@ -24,7 +26,7 @@ public class UI {
 		input.close();
 	}
 
-	private boolean parseCommand(String userCommand) {
+	private boolean parseCommand(String userCommand) throws ScriptException {
 		Scanner command = new Scanner(userCommand);
 		String commandName = command.next();
 		commandName = commandName.toLowerCase();
@@ -63,10 +65,13 @@ public class UI {
 
 		case "evalfun":
 //			// get the evalfun expression
-//			String exp = command.split(" ")[1];
+			Scanner expression = new Scanner(System.in);
+			System.out.println("Enter expression: ");
+	        String holder = expression.nextLine();
+			
 //			
 //			database.setEvalFun("e"); //////////////////////////CHANGE THIS AFTER IMPLEMENTING
-//			draft.evalFun(command);
+			draft.evalFun(holder);
 			break;
 
 		case "pevalfun":

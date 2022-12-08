@@ -7,7 +7,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -253,14 +255,12 @@ public class FantasyDraft {
 		}
 	}
 	
-	/** restore session */
-	public static void restore(String filename) {
-		
-	}
 
-	/** evaluate player ranking based on evalFun expression */
-	public static double evalFun(FantasyPlayer p) {
-		return p.getStat("AVG");
+	/** evaluate player ranking based on evalFun expression 
+	 * @throws ScriptException */
+	public static double evalFun(String expression) throws ScriptException {
+	    return answer;
+		
 	}
 	
 	/** evaluate player ranking based on pEvalFun expression */
@@ -361,10 +361,7 @@ public class FantasyDraft {
 					FantasyPlayer player = new FantasyPlayer(playerData[0], playerData[1], playerData[2], 
 							playerData[3], stats);
 					
-					if (i == 0)
-						player.setRanking(evalFun(player));
-					else
-						player.setRanking(pEvalFun(player));
+					
 					
 					// add the player to the database
 					database.addPlayer(playerData[1] + ", " + playerData[0].charAt(0), player);
