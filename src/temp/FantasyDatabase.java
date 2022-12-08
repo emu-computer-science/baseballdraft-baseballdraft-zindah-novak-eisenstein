@@ -1,4 +1,5 @@
 package temp;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 /**
@@ -8,7 +9,7 @@ import java.util.HashMap;
  * @version (11-18-2022)
  *
  */
-public class FantasyDatabase {
+public class FantasyDatabase implements Serializable {
 	
 	/** Data members */
 	private HashMap<String, FantasyPlayer> players = new HashMap<>();
@@ -63,7 +64,7 @@ public class FantasyDatabase {
 
 		for (FantasyPlayer p : players.values()) {
 			if (p.getPosition().equals(position) || (position.toUpperCase().equals("HITTERS") && (!p.getPosition().equals("P")))
-					|| (position.toUpperCase().equals("PITCHERS") && p.getPosition().equals("P")))
+					|| (position.toUpperCase().equals("P") && p.getPosition().equals("P")))
 				playersInPosition.add(p);
 		}
 
