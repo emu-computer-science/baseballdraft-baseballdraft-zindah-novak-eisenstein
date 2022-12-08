@@ -111,7 +111,7 @@ public class FantasyTeam {
 	}
 	public String draftOrderString()
 	{
-		  String order = " ";
+		  String order = "";
 		  int counter = 1;
 		  for(int x = 0; x < draftOrder.size(); x++)
 		  {
