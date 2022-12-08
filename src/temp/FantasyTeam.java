@@ -110,20 +110,8 @@ public class FantasyTeam implements Serializable {
 		}
 		return team;
 	}
-<<<<<<< HEAD
-	public String draftOrderString()
-	{
-		  String order = "";
-		  int counter = 1;
-		  for(int x = 0; x < draftOrder.size(); x++)
-		  {
-			  order = order + counter + ". " + draftOrder.get(x) + "\n";
-			  counter++;
-		  }
-		 
-		 
-	     return order;
-=======
+
+
 	
 	public String draftOrderString() {
 		String orderedTeam = "";
@@ -137,6 +125,5 @@ public class FantasyTeam implements Serializable {
 		}
 
 		return orderedTeam;
->>>>>>> refs/remotes/origin/main
 	}
 }
