@@ -260,11 +260,16 @@ public class FantasyDraft {
 	public static double evalFun(String expression)  {
 		double answer = 0.0;
 		String operands[] = expression.split(" ");
+		String first = " ";
 		for(int x = 0; x < operands.length; x++)
 		{
-			
+			if(operands[x] == "avg")
+			{
+				first = "V";
+				
+			}
 		}
-		double result = new ExpressionBuilder(operands)
+		double result = new ExpressionBuilder(expression)
 	    		.build()
 	    		.evaluate();
 	    return answer;
