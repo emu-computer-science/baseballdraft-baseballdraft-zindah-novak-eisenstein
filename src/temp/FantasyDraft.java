@@ -257,21 +257,54 @@ public class FantasyDraft {
 
 	/** evaluate player ranking based on evalFun expression 
 	 * @throws ScriptException */
-	public static double evalFun(String expression)  {
+	public static double evalFun(String expression, FantasyDraft draft)  {
 		double answer = 0.0;
+		expression = expression.toLowerCase();
 		String operands[] = expression.split(" ");
-		String first = " ";
-		for(int x = 0; x < operands.length; x++)
+		String vars[] = new String[2];
+		for(int y = 0; y < 2; y++)
+		{
+			for(int x = 0; x < operands.length; x++)
 		{
 			if(operands[x] == "avg")
 			{
-				first = "V";
+				vars[y] = "V";
 				
 			}
+			else if(operands[x] == "ab")
+			{
+				vars[y] = "A";
+			}
+			else if(operands[x] == "sb")
+			{
+				vars[y] = "S";
+			}
+			else if(operands[x] == "obp")
+			{
+				vars[y] = "O";
+			}
+			else if(operands[x] == "slg")
+			{
+				vars[y] = "S";
+			}
+			else if(operands[x] == "ops")
+			{
+				vars[y] = "P";
+			}
+			
 		}
+			
+		}
+		
 		double result = new ExpressionBuilder(expression)
 	    		.build()
 	    		.evaluate();
+		result = new ExpressionBuilder(expression)
+				.variables("V","O")
+				.build()
+				.setVariable("V",0.350)
+				.setVariable("y", 0.310)
+				.evaluate();
 	    return answer;
 		
 	}

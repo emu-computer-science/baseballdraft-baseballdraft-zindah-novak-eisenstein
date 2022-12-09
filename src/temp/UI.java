@@ -71,7 +71,7 @@ public class UI {
 			
 //			
 //			database.setEvalFun("e"); //////////////////////////CHANGE THIS AFTER IMPLEMENTING
-			draft.evalFun(holder);
+			draft.evalFun(holder,draft);
 			break;
 
 		case "pevalfun":
