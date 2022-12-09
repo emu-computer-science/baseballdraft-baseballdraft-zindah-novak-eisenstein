@@ -7,9 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import net.objecthunter.exp4j.ExpressionBuilder;
+import net.objecthunter.exp4j.Expression;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -258,7 +257,16 @@ public class FantasyDraft {
 
 	/** evaluate player ranking based on evalFun expression 
 	 * @throws ScriptException */
-	public static double evalFun(String expression) throws ScriptException {
+	public static double evalFun(String expression)  {
+		double answer = 0.0;
+		String operands[] = expression.split(" ");
+		for(int x = 0; x < operands.length; x++)
+		{
+			
+		}
+		double result = new ExpressionBuilder(operands)
+	    		.build()
+	    		.evaluate();
 	    return answer;
 		
 	}
