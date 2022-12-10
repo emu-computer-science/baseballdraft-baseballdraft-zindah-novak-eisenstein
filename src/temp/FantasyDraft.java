@@ -8,17 +8,20 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
 import net.objecthunter.exp4j.ExpressionBuilder;
+
 /**
  * FantasyDraft.java class implements a fantasy baseball draft
  * 
  * @author Zindah, Novak, Eisenstein
- * @version (11-18-2022)
+ * @version (12-9-2022)
  *
  */
 public class FantasyDraft {
@@ -104,7 +107,7 @@ public class FantasyDraft {
 	}
 	
 	/* Check if a player exists / is free to be drafted */
-	public String checkPlayerValidity(FantasyPlayer player) {
+	private String checkPlayerValidity(FantasyPlayer player) {
 		
 		if(player == null)
 			return "There is no such player in the database";
@@ -191,13 +194,17 @@ public class FantasyDraft {
 		if (command.hasNext())
 			team = command.next().charAt(0);
 		
-		//print roster for given member
-		if (order.equals("team")) 
+		//get roster for given league member
+		if (order.equals("stars") && Character.toUpperCase(team) != ' ') 
 			teamPlayers = fantasyLeagues.get(Character.toUpperCase(team)).draftOrderString();
-		else if (order.equals("stars"))
+		else if (order.equals("team") && Character.toUpperCase(team) != ' ')
 			teamPlayers = fantasyLeagues.get(Character.toUpperCase(team)).toString();	
-		
-		System.out.println(teamPlayers);
+
+		// print roster
+		if (teamPlayers.equals(""))
+			System.out.println("This league has no members yet");
+		else
+			System.out.println(teamPlayers);
 	}
 
 	/** quit program */
@@ -206,14 +213,22 @@ public class FantasyDraft {
 	}
 	
 	/**
-	 * function to save draft data
+	 * method to save draft data
 	 * 
 	 * @param saveDraft
 	 */
 	public void save(Scanner command) {
 
-		String fileName = command.next();
-
+		if (command.hasNext()) {
+			String fileName = command.next();
+			save(fileName);
+		}
+		else
+			System.out.println("Enter a file name to save");
+	}
+	
+	/* helper method called from UI for quit function */
+	public void save(String fileName) {
 		try {
 			// create outputStream object
 			FileOutputStream out = new FileOutputStream(fileName);
@@ -226,85 +241,100 @@ public class FantasyDraft {
 			objectOut.close();
 			
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("Please enter a file name");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	// testing to see if save works
+	/**
+	 * Method to restore a saved file
+	 * @param command
+	 */
 	@SuppressWarnings("unchecked")
-	public void restore () {
-		Scanner in = new Scanner(System.in);
+	public void restore (Scanner command) {
+		if (command.hasNext()) {
+			String fileName = command.next();
 		
-		System.out.println("Enter File Name: ");
-		String fileName = in.next();
-		
-		try
-		{
-			FileInputStream fin = new FileInputStream(fileName);
-			ObjectInputStream oin = new ObjectInputStream(fin);
-			database = (FantasyDatabase) oin.readObject();
-			fantasyLeagues = (HashMap<Character, FantasyTeam>) oin.readObject();
-			
-			oin.close();
-			fin.close();
-		} 
-		catch (Exception e)
-		{
-			e.printStackTrace();
+			try
+			{
+				FileInputStream fin = new FileInputStream(fileName);
+				ObjectInputStream oin = new ObjectInputStream(fin);
+				database = (FantasyDatabase) oin.readObject();
+				fantasyLeagues = (HashMap<Character, FantasyTeam>) oin.readObject();
+				
+				oin.close();
+				fin.close();
+			} 
+			catch (Exception e)
+			{
+				System.out.println("Please enter a valid file");
+			}
+			finally {
+				command.close();
+			}
 		}
-		finally {
-			in.close();
+		else {
+			System.out.println("Please enter a file name to restore");
 		}
 	}
 	
-	/** restore session */
-	public static void restore(String filename) {
-		
-	}
-
 	/**
 	 * evalfun to get user expression
 	 * @param command
 	 */
 	public void setEvalPeval(Scanner command, String whichEval) {
 		String expression = "";
-		
+
 		// get full expression
 		while (command.hasNext())
 			expression += command.next();
-			
+		
+		database.setEvalFun(expression.toUpperCase());
+		
 		// call appropriate eval function
 		if (whichEval.toLowerCase().equals("eval"))
-			database.setEvalFun(expression);
-		else if (whichEval.toLowerCase().equals("peval"))
-			database.setPEvalFun(expression);
+			database.setEvalFun(expression.toUpperCase());
 		
-		System.out.println(whichEval.toUpperCase() + " eval has been changed");
+		else if (whichEval.toLowerCase().equals("peval"))
+			database.setPEvalFun(expression.toUpperCase());
+		
+		// reset expression if not valid
+		else {
+			database.setEvalFun("AVG");
+			database.setPEvalFun("IP");
+			expression = "";
+		}
+		
+		// print confirmation or prompt
+		if (expression.equals("")) 
+			System.out.println("Please enter a new expression - expression has been reset");
+		else
+			System.out.println("Eval has been changed to " + expression.toUpperCase());
 	}
 
-	public double callEval(FantasyPlayer p) {
+	/* helper method calls correct evaluation method */
+	private double callEval(FantasyPlayer p) {
 		String expression;
-		double result = 1;
+		double result = p.getRanking();
 		
 		// find which expression to evaluate
 		if (p.getPosition().equals("P")) {
 			expression = database.getPEvalFun();
-			
 			// make sure variables are one letter
 			expression = expression.replace("ERA", "E").replace("GS", "S");
 			expression = expression.replace("IP", "I").replace("BB", "B");
+
 			result = evaluate(p, expression, new String[] {"ERA", "G", "GS", "IP", "BB"});
 		}
 		else
 		{
-			expression = database.getEvalFun();
-	
+			expression = database.getEvalFun(); 
 			// make sure variables are one letter
 			expression = expression.replace("AB", "E").replace("SB", "S").replace("AVG", "I");
 			expression = expression.replace("OBP", "B").replace("SLG", "G");
-			result = evaluate(p, expression, new String[] {"AB", "SB", "AVG", "OBP", "SLG"});
+
+			result = evaluate(p, expression, new String[] {"AB", "SLG", "SB", "AVG", "OBP"});
 		}
 		
 		return result;
@@ -312,19 +342,28 @@ public class FantasyDraft {
 	}
 
 	/** evaluate player ranking based on pEvalFun expression */
-	public double evaluate(FantasyPlayer p, String expression, String[] statNames) {
+	private double evaluate(FantasyPlayer p, String expression, String[] statNames) {
 
-		double result = new ExpressionBuilder(expression)
-	    		.variables("E", "G", "S", "I", "B") // AB, SB, AVG, OBP, SLB
-	            .build()
-	            .setVariable("E", p.getStat(statNames[0]))
-	            .setVariable("G", p.getStat(statNames[1]))
-	            .setVariable("S", p.getStat(statNames[2]))
-	            .setVariable("I", p.getStat(statNames[3]))
-	            .setVariable("B", p.getStat(statNames[4]))
-	            .evaluate();
-		
-		return result;
+		if (!expression.equals("")) {
+			try {
+				double result = new ExpressionBuilder(expression)
+			    		.variables("E", "G", "S", "I", "B") // AB, SB, AVG, OBP, SLB
+			            .build()
+			            .setVariable("E", p.getStat(statNames[0]))
+			            .setVariable("G", p.getStat(statNames[1]))
+			            .setVariable("S", p.getStat(statNames[2]))
+			            .setVariable("I", p.getStat(statNames[3]))
+			            .setVariable("B", p.getStat(statNames[4]))
+			            .evaluate();
+				
+				return result;
+			}
+			catch(Exception e) {
+				System.out.println("Please enter only numbers and " + Arrays.toString(statNames) 
+				+ " in your expression");
+			}
+		}
+		return p.getRanking();
 	}
 	
 	/**
@@ -369,7 +408,7 @@ public class FantasyDraft {
 		// declare data and ranking variables
 		HashMap<String, Double> stats;
 
-		String[][] userStats = {{"AB", "ERA"}, {"SB", "G"}, {"AVG", "IP"}, {"OBP","GS"}, {"SLG", "BB"}};
+		String[][] userStats = {{"AB", "ERA"}, {"SB", "G"}, {"AVG", "GS"}, {"OBP","IP"}, {"SLG", "BB"}};
 		String[] positions = { "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF"};
 		String[] files = {"baseball-non-pitchers.csv", "baseball-pitchers.csv"};
 		
@@ -415,12 +454,9 @@ public class FantasyDraft {
 					// add the player to the database
 					database.addPlayer(playerData[1].toLowerCase() + ", " 
 					+ playerData[0].toLowerCase().charAt(0), player);
-					
-					// check which file is being parsed and set player ranking
-					if (i == 0)
-						player.setRanking(callEval(player));
-					else
-						player.setRanking(callEval(player));
+
+					// set player ranking
+					player.setRanking(callEval(player));
 					
 				}
 			}

@@ -11,9 +11,7 @@ import java.util.HashMap;
  */
 public class FantasyDatabase implements Serializable {
 	
-	/**
-	 * 
-	 */
+	/** id for serializing */
 	private static final long serialVersionUID = 1L;
 	/** Data members */
 	private HashMap<String, FantasyPlayer> players = new HashMap<>();

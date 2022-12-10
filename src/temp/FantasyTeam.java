@@ -97,8 +97,8 @@ public class FantasyTeam implements Serializable {
 		 
 		return null;
 	}
-	
-	/** return player string in order of draft */
+
+	/** Return Players in order of draft */
 	public String draftOrderString() {
 		String orderedTeam = "";
 

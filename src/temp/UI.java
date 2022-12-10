@@ -1,12 +1,14 @@
 package temp;
 
 import java.util.Scanner;
+
 /**
  * UI.java deals with user input
  * 
  * @author Zindah, Novak, Eisenstein
  *
  */
+
 public class UI {
 	/* data members */
 	private boolean shouldRun = true;
@@ -20,6 +22,7 @@ public class UI {
 	 * 
 	 */
 	public void interactWithUser() {
+
 		Scanner input = new Scanner(System.in);
 
 		draft.initDatabase();
@@ -63,15 +66,17 @@ public class UI {
 		case "team":
 			draft.team(command, "team");
 			break;
+			
 		case "stars":
 			draft.team(command, "stars");
 			break;
+			
 		case "save":
 			draft.save(command);
 			break;
-
+			
 		case "restore":
-			draft.restore();
+			draft.restore(command);
 			break;
 
 		case "evalfun":
@@ -91,6 +96,29 @@ public class UI {
 			break;
 
 		case "quit":
+			System.out.println("Would you like to save? (y/n) ");
+			command.close();
+			
+			command = new Scanner(System.in);
+			
+			boolean commandGiven = false;
+			while(!commandGiven) {
+				
+				switch (command.next()) {
+				case "y":
+					System.out.println("Enter file name: ");
+					String fileName = command.next();
+					draft.save(fileName);
+					commandGiven = true;
+					break;
+				case "n":
+					commandGiven = true;
+					break;
+				default:
+					System.out.println("Invalid command. Would you like to save? (y/n)");
+					break;
+				}
+			}
 			command.close();
 			return false;
 
@@ -103,7 +131,7 @@ public class UI {
 	/** Method prints help menu
 	 * 
 	 */
-	private void help() {
+	public void help() {
 		
 		System.out.println("Options:");
 		System.out.println("ODRAFT \"playername\" leagueMember: Draft player to specified team");

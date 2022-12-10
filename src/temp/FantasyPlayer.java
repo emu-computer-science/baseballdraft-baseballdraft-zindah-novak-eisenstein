@@ -12,10 +12,9 @@ import java.util.HashMap;
  */
 public class FantasyPlayer implements Serializable {
 	
-	/**
-	 * 
-	 */
+	/** id for restore method*/
 	private static final long serialVersionUID = 1L;
+	
 	/** Data members */
 	private String firstName;
 	private String lastName;
@@ -77,7 +76,9 @@ public class FantasyPlayer implements Serializable {
 	/** Return a string representing the player */
 	@Override 
 	public String toString() {
-		return String.format("%" + (-10) + "s", firstName) + "\t" + String.format("%" + (-10) + "s", lastName) + "\t" + team + "\t" + position + "\t" + ranking;
+		return String.format("%" + (-10) + "s", firstName) 
+				+ "\t" + String.format("%" + (-10) + "s", lastName) 
+				+ "\t" + team + "\t" + position + "\t" + String.format("%,.3f", ranking);
 	}
 
 }
