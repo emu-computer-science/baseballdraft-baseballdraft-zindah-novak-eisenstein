@@ -1,7 +1,8 @@
 package temp;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 /**
  * FantasyTeam.java class represents a fantasy baseball team
@@ -10,17 +11,17 @@ import java.util.LinkedHashMap;
  * @version (11-18-2022)
  *
  */
-public class FantasyTeam {
-	
-	/**Data Members*/
-	private char League;
-	private int numP = 0;
-	private String[] positions = { "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "P1", "P2", "P3", "P4", "P5"};
-	private String name = " ";
-	private ArrayList<String> draftOrder = new ArrayList<String>();
-	private int counter = 0;
+public class FantasyTeam implements Serializable {
 
-	private LinkedHashMap<String,FantasyPlayer> teamPlayers; //string name, player
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/** Data Members */
+	private LinkedHashMap<String, FantasyPlayer> teamPlayers; // string position, player
+	private String[] positions = { "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "P1", "P2", "P3", "P4", "P5" };
+	private char League;
+	private int numPitchers = 0;
 
 	/** Constructor an empty team */
 	public FantasyTeam(char league) {
@@ -33,9 +34,8 @@ public class FantasyTeam {
 		this.teamPlayers = teamPlayers;
 		this.League = league;
 	}
-
 	
-	
+	/** Access team players */
 	public LinkedHashMap<String, FantasyPlayer> getTeamPlayers() {
 		return teamPlayers;
 	}
@@ -49,33 +49,22 @@ public class FantasyTeam {
 
 		// if it's a pitcher, set appropriate position
 		if (player.getPosition().equals("P")) {
-			numP += 1;
+			numPitchers += 1;
 			
-			if (numP <= 5)
+			if (numPitchers <= 5)
 			{
-				teamPlayers.put(positions[7 + numP], player);
-			    name = player.getName() + " " + player.getLast();
-			    draftOrder.add(counter, name);
-			    name = " ";
-			    counter++;
-			    
+				teamPlayers.put(positions[7 + numPitchers], player);
+			    //name = player.getName() + " " + player.getLast();
 			}	
 			else
-			{
 				return false;
-			}
-				
 		} 
 		else
 		{
 			teamPlayers.put(player.getPosition(), player);
-			name = player.getName() + " " + player.getLast();
-			draftOrder.add(counter, name);
-			name = " ";
-			counter++;
-		
+			//name = player.getName() + " " + player.getLast();
 		}
-          return true;
+		return true;
 	}
 
 	/** Check if a team already has a player */
@@ -96,8 +85,35 @@ public class FantasyTeam {
 		return League;
 	}
 	
+	/** return player from team */
+	public FantasyPlayer getPlayer(String p) {
+		 Set <String> keys = teamPlayers.keySet();
+
+		 for (String key : keys) {
+			 if (teamPlayers.get(key) != null && teamPlayers.get(key).getFullName().equals(p)) {
+				 return teamPlayers.get(key);
+			 }
+		 }
+		 
+		return null;
+	}
+
+	/** Return Players in order of draft */
+	public String draftOrderString() {
+		String orderedTeam = "";
+
+		Set<String> keys = teamPlayers.keySet();
+
+		for (String key : keys) {
+			if (teamPlayers.get(key) != null)
+				orderedTeam += key + ": " + teamPlayers.get(key).getName() + " " 
+						+ teamPlayers.get(key).getLast() + "\n";
+		}
+
+		return orderedTeam;
+	}
 	
-	
+	/** FantasyTeam toString method */
 	@Override
 	public String toString() {
 		String team = "";
@@ -105,21 +121,9 @@ public class FantasyTeam {
 		for (String pos : positions)
 		{
 			if (teamPlayers.get(pos) != null)
-				team += pos + ": " + teamPlayers.get(pos).getName() + " " + teamPlayers.get(pos).getLast() + "\n";
+				team += pos + ": " + teamPlayers.get(pos).getName() + " " 
+						+ teamPlayers.get(pos).getLast() + "\n";
 		}
 		return team;
-	}
-	public String draftOrderString()
-	{
-		  String order = " ";
-		  int counter = 1;
-		  for(int x = 0; x < draftOrder.size(); x++)
-		  {
-			  order = order + counter + ". " + draftOrder.get(x) + "\n";
-			  counter++;
-		  }
-		 
-		 
-	     return order;
 	}
 }

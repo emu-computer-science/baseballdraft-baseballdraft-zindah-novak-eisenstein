@@ -1,5 +1,6 @@
 package temp;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.HashMap;
 /**
@@ -9,7 +10,10 @@ import java.util.HashMap;
  * @version (11-18-2022)
  *
  */
-public class FantasyPlayer {
+public class FantasyPlayer implements Serializable {
+	
+	/** id for restore method*/
+	private static final long serialVersionUID = 1L;
 	
 	/** Data members */
 	private String firstName;
@@ -39,6 +43,11 @@ public class FantasyPlayer {
 		return this.firstName;
 	}
 
+	/** Get player last name and first initial */
+	public String getFullName() {
+		return this.lastName + ", " + firstName.charAt(0);
+	}
+
 	/** Get player last name */
 	public String getLast() {
 		return this.lastName;
@@ -54,15 +63,22 @@ public class FantasyPlayer {
 		this.ranking = rank;
 	}
 	
+	/** get player stats */
 	public double getStat(String data) {
 		double v = stats.get(data);
 		return v;
+	}
+	
+	public HashMap<String, Double> getStats() {
+		return stats;
 	}
 
 	/** Return a string representing the player */
 	@Override 
 	public String toString() {
-		return String.format("%" + (-10) + "s", firstName) + "\t" + String.format("%" + (-10) + "s", lastName) + "\t" + team + "\t" + position + "\t" + ranking;
+		return String.format("%" + (-10) + "s", firstName) 
+				+ "\t" + String.format("%" + (-10) + "s", lastName) 
+				+ "\t" + team + "\t" + position + "\t" + String.format("%,.3f", ranking);
 	}
 
 }
