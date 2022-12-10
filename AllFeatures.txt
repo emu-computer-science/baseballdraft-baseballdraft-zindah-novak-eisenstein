@@ -1,5 +1,7 @@
 Feature List Semester Project 
 Burndown chart Sprint 1: https://docs.google.com/spreadsheets/d/1XqENLjy-m-bnZHEbnOHc3NhUC-9VL-95e8wdcKMjq-Y/edit?usp=sharing
+Burndown chart Sprint 2: https://docs.google.com/spreadsheets/d/1l2L5OvVOe0_9RIGtas9OBGHJ5pC3QQ6oly9oiyn0VDI/edit?usp=sharing
+Burndown chart Sprint 3: https://docs.google.com/spreadsheets/d/1Dis7fjisFCb9RkIfiDgSfeDEZAt8buRh8NwYn3BFYMw/edit?usp=sharing
 
 Names of team members: Nadya Novak, Farha Zindah, Jacob Eisenstein
 

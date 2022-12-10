@@ -25,19 +25,28 @@ public class FantasyDraft {
 		
 		// populate mlb database
 		initDatabase();
+
+		// create teams
 		FantasyTeam leagueA = new FantasyTeam('A');
 		FantasyTeam leagueB = new FantasyTeam('B');
 		FantasyTeam leagueC = new FantasyTeam('C');
 		FantasyTeam leagueD = new FantasyTeam('D');
 		
+		// Variable to hold command
+		String command;
+
 		// run menu
 		while(true)
 		{
-			String command;
 			System.out.println("Enter command or enter HELP to see list of available commands");
 			command = key.nextLine();
 			recieveCommand(command, leagueA, leagueB, leagueC, leagueD);
 		}
+	}
+	
+	// returns team object (for testing purposes)
+	public FantasyTeam getTeam(FantasyTeam team) {
+		return team;
 	}
 
 	/** Drafts a player to the given league member */
@@ -45,6 +54,7 @@ public class FantasyDraft {
 
 		FantasyPlayer tempP = database.getPlayer(playerName);
 
+		// check if player can be drafted
 		if(tempP == null)
 		{
 			System.out.println("There is no such player in the database");
@@ -53,12 +63,16 @@ public class FantasyDraft {
 		{
 			System.out.println("That player has already been drafted");
 		}
+		// add player to the league and print confirmation
 		else if (!(leagueMember.hasPosition(tempP.getPosition())))
 		{
-			leagueMember.addPlayer(tempP);
-			database.addDrafted(tempP);
-			System.out.println(tempP.getName() + " has been drafted to team " + 
-			leagueMember.getLeague());
+			if (leagueMember.addPlayer(tempP))
+			{
+				database.addDrafted(tempP);
+				System.out.println(tempP.getName() + " has been drafted to team " + leagueMember.getLeague());
+			}
+			else
+				System.out.println("The " + tempP.getPosition() + " position is full");
 		}
 		else
 			System.out.println("You already have a player for position " + tempP.getPosition());
@@ -76,17 +90,34 @@ public class FantasyDraft {
 		// get player rankings in given position
 		if (position == " ")
 			tempPlayers = database.getPlayersByPosition("hitters");
-		else if (memberA.hasPosition(position))
+		else if (memberA.hasPosition(position.toUpperCase()))
 			System.out.println("You already have a player for position " + position);
 		else 
-			tempPlayers = database.getPlayersByPosition(position);
-		
+			tempPlayers = database.getPlayersByPosition(position.toUpperCase());
+
 		// sort players by ranking
 		if (tempPlayers != null)
 		{
+			// print headings
+			System.out.println("_____________________________________________________\nFirst     "
+					+ "\tLast          \tTeam\tPos\tRank\n_______________________________" +
+					"______________________");
+			
+			// loop through relevant players and update ranking accordingly
+			for (FantasyPlayer p : tempPlayers)
+			{
+				if (p.getPosition().contains("P"))
+				{
+					p.setRanking(pEvalFun(p));
+				}
+				else
+					p.setRanking(database.getPosWeight(p.getPosition()) * evalFun(p));
+			}
+			
+			// sort players
 			Collections.sort(tempPlayers, new playerComparator());
 
-			// print out sorted array
+			// loop through and print out sorted array of available players
 			for (FantasyPlayer p : tempPlayers)
 			{
 				if((!memberA.hasPosition(p.getPosition())) && (database.isAvailable(p)))
@@ -102,7 +133,8 @@ public class FantasyDraft {
 	}
 	
 	/** prints out given team roster in order of draft*/
-	public static void stars(char leagueMember) {
+	public static void stars(FantasyTeam leagueMember) {
+		System.out.println(leagueMember.draftOrderString());
 		//Same as TEAM, but the ordering of the players matches the 
 		//order in which they were drafted overall
 	}
@@ -121,13 +153,43 @@ public class FantasyDraft {
 	public static void restore(String filename) {
 		
 	}
-	
-	public static double evalFun(double AB, double SB, double AVG, double OBP, double SLG) {
-		return AVG;
+
+	/** evaluate player ranking based on evalFun expression */
+	public static double evalFun(FantasyPlayer p) {
+		return p.getStat("AVG");
 	}
 	
-	public static double pEvalFun(double ERA, double G, double IP, double GS, double BB) {
-		return IP;
+	/** evaluate player ranking based on pEvalFun expression */
+	public static double pEvalFun(FantasyPlayer p) {
+		return p.getStat("IP");
+	}
+	
+	/** weight position importance */
+	public static void weight (String[] arr) {
+		// user data
+		String position = "";
+		int weight = 0;
+		
+		// loop through the input array and change position weight
+		for(int i = 0; i < arr.length - 1; i+=2) {
+			
+			position = arr[i];
+			
+			// validate input
+			try 
+			{
+				weight = Integer.parseInt(arr[i+1]);
+			}
+			catch (Exception e) 
+			{
+				System.out.println("Please enter the correct format: [pos] [weight] \n"
+			+ "(ex: weight 1b 1 2b 4)");
+			}
+			
+			// set position weight in database
+			if (weight > 0)
+				database.setPosWeight(position, weight);
+		}
 	}
 	
 	/** list commands/syntax */
@@ -138,51 +200,67 @@ public class FantasyDraft {
 	/** Populate MLB player database */
 	public static void initDatabase() {
 		
-		FantasyPlayer player;
-		
-		// pitcher data is stored as First, Last, Position, Team, ERA, G, GS, IP, BB
-		// non-pitcher data is stored as First, Last, Position, team, AB, SB, AVG, OBP, SLG
+		// declare data and ranking variables
+		HashMap<String, Double> stats;
 		double d1, d2, d3, d4, d5;
-
+		
+		String[][] userStats = {{"AB", "ERA"}, {"SB", "G"}, {"AVG", "IP"}, {"OBP","GS"}, {"SLG", "BB"}};
+		String[] positions = { "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF"};
 		String[] files = {"baseball-non-pitchers.csv", "baseball-pitchers.csv"};
-
+		
+		// temp objects
+		BufferedReader br;
 		String line = "";
 		
-		double ranking = 0;
-		
+		// initialize the weight of every position to 1
+		for (int i = 0; i < positions.length; i++) {
+			database.setPosWeight(positions[i], 1);
+		}
+
 		try {
 			// parse the CSV files 
 			for (int i = 0; i < 2; i++) 
 			{
-				BufferedReader br = new BufferedReader(new FileReader(files[i]));
+				br = new BufferedReader(new FileReader(files[i]));
 				
 				// skip first line
 				line = br.readLine();
 				
 				while ((line = br.readLine()) != null && line.charAt(1) != ',')
 				{
+					stats = new HashMap<>();
+					
+					// parse the player data string and initialize the data variables
 					String[] playerData = line.split(",");
+					
 					d1 = Double.parseDouble(playerData[4]);
 					d2 = Double.parseDouble(playerData[5]);
 					d3 = Double.parseDouble(playerData[6]);
 					d4 = Double.parseDouble(playerData[7]);
 					d5 = Double.parseDouble(playerData[8]);
 					
-					// find and set ranking for pitchers and hitters
-					if (i == 0)
-						ranking = evalFun(d1, d2, d3, d4, d5);
-					else
-						ranking = pEvalFun(d1, d2, d3, d4, d5);
+					double[] data = {d1, d2, d3, d4, d5};
 					
-					// create and add a new player to the database
-					player = new FantasyPlayer(playerData[0], playerData[1], playerData[2], playerData[3],
-							evalFun(d1, d2, d3, d4, d5));
+					// set player stats 
+					for (int j = 0; j < 5; j++) {
+						stats.put(userStats[j][i], data[j]);
+					}
 
+					// create and add a new player to the database
+					FantasyPlayer player = new FantasyPlayer(playerData[0], playerData[1], playerData[2], 
+							playerData[3], stats);
+					
+					if (i == 0)
+						player.setRanking(evalFun(player));
+					else
+						player.setRanking(pEvalFun(player));
+					
+					// add the player to the database
 					database.addPlayer(playerData[1] + ", " + playerData[0].charAt(0), player);
 				}
 			}
-		
-		} catch (IOException e) {
+		} 
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -191,8 +269,8 @@ public class FantasyDraft {
 	public static void showMenu() {
 		//finish filling in later
 		System.out.println("Options:");
-		System.out.println("ODRAFT: Draft player to specified team");
-		System.out.println("IDRAFT: Draft player to own team");
+		System.out.println("ODRAFT \"playername\" leagueMember: Draft player to specified team");
+		System.out.println("IDRAFT \"playername\": Draft player to own team");
 		System.out.println("OVERALL: View ranking for players in given (non-pitcher) position");
 		System.out.println("POVERALL: View ranking pr pitchers");
 		System.out.println("TEAM: View roster of given team");
@@ -201,6 +279,7 @@ public class FantasyDraft {
 		System.out.println("RESTORE: Restore saved file");
 		System.out.println("EVALFUN: ");
 		System.out.println("PEVALFUN: ");
+		System.out.println("WEIGHT: ");
 		System.out.println("HELP: See available commands");
 		System.out.println("QUIT: Quit program");
 	}
@@ -212,19 +291,20 @@ public class FantasyDraft {
 
 		char leagueMember;
 
+		// get command keyword from the user input (to use appropriate switch statement)
 		String commandFirst = command.split(" ")[0].toLowerCase();
 		String secondCommand = " ";
-		
-		if (command.split(" ").length == 2)
-			 secondCommand = command.split(" ")[1];
 		
 		switch(commandFirst) {
 		//TODO:rename commands to something more natural/user friendly?
 			
-		//odraft has to Enter player name surrounded by quotes and league member");
-		//Ex: odraft "Martinez, A" A ;
 			case "odraft":
+				//odraft has to Enter player name surrounded by quotes and league member");
+				//Ex: odraft "Martinez, A";
+				
+				// get first name
 				String name = command.split("\"")[1];
+				// get league member
 				leagueMember = Character.toUpperCase(command.split("\"")[2].trim().charAt(0));
 	
 				if(leagueMember == 'A') {
@@ -247,11 +327,15 @@ public class FantasyDraft {
 			case "idraft":
 				name = command.split("\"")[1];
 				
-				iDraft(name, leagueA);
+				oDraft(name, leagueA);
 				break;
 			
 			case "overall":
-				if (!secondCommand.equals("P"))
+				// check if there is a second command after overall
+				if (command.split(" ").length == 2)
+					 secondCommand = command.split(" ")[1];
+				
+				if (!secondCommand.toUpperCase().equals("P"))
 					overall(secondCommand, leagueA);
 				else
 					System.out.println("Overall doesn't print pitchers");
@@ -287,7 +371,21 @@ public class FantasyDraft {
 			case "stars":
 				System.out.println("Enter participant letter");
 				leagueMember = keyboard.next().charAt(0);
-				stars(leagueMember);
+				if(leagueMember == 'A') {
+					stars(leagueA);
+				}
+				else if(leagueMember == 'B')
+				{
+					stars(leagueB);
+				}
+				else if(leagueMember == 'C')
+				{
+					stars(leagueC);
+				}
+				else if(leagueMember == 'D')
+				{
+					stars(leagueD);
+				}
 				break;
 				
 			case "save":
@@ -306,19 +404,28 @@ public class FantasyDraft {
 				restore(secondCommand);
 				break;
 				
-			case "evalfun":
-				evalFun(0,0,0,0,0);
+			case "evalfun": 
+				// get the evalfun expression
+				String exp = command.split(" ")[1];
+				
+				database.setEvalFun("e"); //////////////////////////CHANGE THIS AFTER IMPLEMENTING
 				break;
 				
 			case "pevalfun":
 				//pEvalFun();
 				break;
-				
+			
+			case "weight":
+				// split the input string into command and inputs
+				String[] commandArr = command.split(" ");
+				String[] c = Arrays.copyOfRange(commandArr, 1, commandArr.length);
+				// call the weight function
+				weight(c);
+				break;
 			case "help":
 				showMenu();
 				break;
-		
-		
+
 			default: System.out.println("Invalid command. Type HELP to see available commands.");
 		}
 		
