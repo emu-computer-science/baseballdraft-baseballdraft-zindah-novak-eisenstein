@@ -142,8 +142,8 @@ public class UI {
 		System.out.println("STARS LeagueLetter: View roster of given team in drafting order");
 		System.out.println("SAVE filename.txt: Save file");
 		System.out.println("RESTORE filename.txt: Restore saved file");
-		System.out.println("EVALFUN: ");
-		System.out.println("PEVALFUN: ");
+		System.out.println("EVALFUN stats");
+		System.out.println("PEVALFUN stats: ");
 		System.out.println("WEIGHT: change ranking weight for each position (ex: 1B 2 2B 3");
 		System.out.println("HELP: See available commands");
 		System.out.println("QUIT: Quit program");
