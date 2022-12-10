@@ -11,6 +11,10 @@ import java.util.HashMap;
  */
 public class FantasyDatabase implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/** Data members */
 	private HashMap<String, FantasyPlayer> players = new HashMap<>();
 	private HashMap<String, FantasyPlayer> drafted = new HashMap<>();
@@ -39,7 +43,7 @@ public class FantasyDatabase implements Serializable {
 	/** return a player in the database */
 	public FantasyPlayer getPlayer(String player)
 	{
-		return players.get(player);
+		return players.get(player.toLowerCase());
 	}
 	
 	/** add a player to the database **/
@@ -64,8 +68,10 @@ public class FantasyDatabase implements Serializable {
 
 		for (FantasyPlayer p : players.values()) {
 			if (p.getPosition().equals(position) || (position.toUpperCase().equals("HITTERS") && (!p.getPosition().equals("P")))
-					|| (position.toUpperCase().equals("P") && p.getPosition().equals("P")))
-				playersInPosition.add(p);
+					|| (position.toUpperCase().equals("P") && p.getPosition().equals("P"))) {
+				if (isAvailable(p))
+					playersInPosition.add(p);
+			}
 		}
 
 		return playersInPosition;
@@ -89,19 +95,23 @@ public class FantasyDatabase implements Serializable {
 		return posWeights.get(pos);
 	}
 
+	/** set eval value */
 	public void setEvalFun(String string) {
 		evalE = string;
 	}
 	
+	/** get eval value */
 	public String getEvalFun() {
 		return evalE;
 		
 	}
 	
+	/** set PEval value */
 	public void setPEvalFun(String string) {
 		pEvalE = string;
 	}
 	
+	/** get PEval value */
 	public String getPEvalFun() {
 		return pEvalE;
 	}

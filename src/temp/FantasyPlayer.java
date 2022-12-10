@@ -12,6 +12,10 @@ import java.util.HashMap;
  */
 public class FantasyPlayer implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/** Data members */
 	private String firstName;
 	private String lastName;
@@ -40,7 +44,7 @@ public class FantasyPlayer implements Serializable {
 		return this.firstName;
 	}
 
-	/** Get player first name */
+	/** Get player last name and first initial */
 	public String getFullName() {
 		return this.lastName + ", " + firstName.charAt(0);
 	}
@@ -60,9 +64,14 @@ public class FantasyPlayer implements Serializable {
 		this.ranking = rank;
 	}
 	
+	/** get player stats */
 	public double getStat(String data) {
 		double v = stats.get(data);
 		return v;
+	}
+	
+	public HashMap<String, Double> getStats() {
+		return stats;
 	}
 
 	/** Return a string representing the player */

@@ -1,7 +1,6 @@
 package temp;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
@@ -13,15 +12,16 @@ import java.util.Set;
  *
  */
 public class FantasyTeam implements Serializable {
-	
-	/**Data Members*/
-	private char League;
-	private int numP = 0;
-	private String[] positions = { "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "P1", "P2", "P3", "P4", "P5"};
-	private String name = " ";
-	private int counter = 0;
 
-	private LinkedHashMap<String,FantasyPlayer> teamPlayers; //string position, player
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/** Data Members */
+	private LinkedHashMap<String, FantasyPlayer> teamPlayers; // string position, player
+	private String[] positions = { "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "P1", "P2", "P3", "P4", "P5" };
+	private char League;
+	private int numPitchers = 0;
 
 	/** Constructor an empty team */
 	public FantasyTeam(char league) {
@@ -35,6 +35,7 @@ public class FantasyTeam implements Serializable {
 		this.League = league;
 	}
 	
+	/** Access team players */
 	public LinkedHashMap<String, FantasyPlayer> getTeamPlayers() {
 		return teamPlayers;
 	}
@@ -48,14 +49,12 @@ public class FantasyTeam implements Serializable {
 
 		// if it's a pitcher, set appropriate position
 		if (player.getPosition().equals("P")) {
-			numP += 1;
+			numPitchers += 1;
 			
-			if (numP <= 5)
+			if (numPitchers <= 5)
 			{
-				teamPlayers.put(positions[7 + numP], player);
-			    name = player.getName() + " " + player.getLast();
-			    name = " ";
-			    counter++;
+				teamPlayers.put(positions[7 + numPitchers], player);
+			    //name = player.getName() + " " + player.getLast();
 			}	
 			else
 				return false;
@@ -63,9 +62,7 @@ public class FantasyTeam implements Serializable {
 		else
 		{
 			teamPlayers.put(player.getPosition(), player);
-			name = player.getName() + " " + player.getLast();
-			name = " ";
-			counter++;
+			//name = player.getName() + " " + player.getLast();
 		}
 		return true;
 	}
@@ -88,29 +85,20 @@ public class FantasyTeam implements Serializable {
 		return League;
 	}
 	
+	/** return player from team */
 	public FantasyPlayer getPlayer(String p) {
 		 Set <String> keys = teamPlayers.keySet();
 
 		 for (String key : keys) {
-			 if (teamPlayers.get(key) != null && teamPlayers.get(key).getFullName().equals(p))
+			 if (teamPlayers.get(key) != null && teamPlayers.get(key).getFullName().equals(p)) {
 				 return teamPlayers.get(key);
+			 }
 		 }
 		 
 		return null;
 	}
 	
-	@Override
-	public String toString() {
-		String team = "";
-
-		for (String pos : positions)
-		{
-			if (teamPlayers.get(pos) != null)
-				team += pos + ": " + teamPlayers.get(pos).getName() + " " + teamPlayers.get(pos).getLast() + "\n";
-		}
-		return team;
-	}
-	
+	/** return player string in order of draft */
 	public String draftOrderString() {
 		String orderedTeam = "";
 
@@ -118,10 +106,24 @@ public class FantasyTeam implements Serializable {
 
 		for (String key : keys) {
 			if (teamPlayers.get(key) != null)
-				orderedTeam += key + ": " + teamPlayers.get(key).getName() + " " + teamPlayers.get(key).getLast()
-						+ "\n";
+				orderedTeam += key + ": " + teamPlayers.get(key).getName() + " " 
+						+ teamPlayers.get(key).getLast() + "\n";
 		}
 
 		return orderedTeam;
+	}
+	
+	/** FantasyTeam toString method */
+	@Override
+	public String toString() {
+		String team = "";
+
+		for (String pos : positions)
+		{
+			if (teamPlayers.get(pos) != null)
+				team += pos + ": " + teamPlayers.get(pos).getName() + " " 
+						+ teamPlayers.get(pos).getLast() + "\n";
+		}
+		return team;
 	}
 }

@@ -1,8 +1,14 @@
 package temp;
 
 import java.util.Scanner;
-
+/**
+ * UI.java deals with user input
+ * 
+ * @author Zindah, Novak, Eisenstein
+ *
+ */
 public class UI {
+	/* data members */
 	private boolean shouldRun = true;
 	private static FantasyDraft draft;
 
@@ -10,6 +16,9 @@ public class UI {
 		draft = newDraft;
 	}
 
+	/** Method to prompt user 
+	 * 
+	 */
 	public void interactWithUser() {
 		Scanner input = new Scanner(System.in);
 
@@ -20,10 +29,14 @@ public class UI {
 			String userCommand = input.nextLine();
 			shouldRun = parseCommand(userCommand);
 		}
-
 		input.close();
 	}
 
+	/** Menu method calls appropriate fantasyDraft methods
+	 * 
+	 * @param userCommand
+	 * @return run value
+	 */
 	private boolean parseCommand(String userCommand) {
 		Scanner command = new Scanner(userCommand);
 		String commandName = command.next();
@@ -54,7 +67,7 @@ public class UI {
 			draft.team(command, "stars");
 			break;
 		case "save":
-			draft.save();
+			draft.save(command);
 			break;
 
 		case "restore":
@@ -62,16 +75,11 @@ public class UI {
 			break;
 
 		case "evalfun":
-//			// get the evalfun expression
-//			String exp = command.split(" ")[1];
-//			
-//			database.setEvalFun("e"); //////////////////////////CHANGE THIS AFTER IMPLEMENTING
-//			draft.evalFun(command);
+			draft.setEvalPeval(command, "eval");
 			break;
 
 		case "pevalfun":
-			// pEvalFun();
-//			draft.pEvalFun(command);
+			draft.setEvalPeval(command, "pEval");
 			break;
 
 		case "weight":
@@ -92,24 +100,30 @@ public class UI {
 		return true;
 	}
 
+	/** Method prints help menu
+	 * 
+	 */
 	private void help() {
-		// finish filling in later
+		
 		System.out.println("Options:");
 		System.out.println("ODRAFT \"playername\" leagueMember: Draft player to specified team");
 		System.out.println("IDRAFT \"playername\": Draft player to own team");
-		System.out.println("OVERALL: View ranking for players in given (non-pitcher) position");
-		System.out.println("POVERALL: View ranking pr pitchers");
-		System.out.println("TEAM: View roster of given team");
-		System.out.println("STARS: View roster of given team in drafting order");
-		System.out.println("SAVE: Save file");
-		System.out.println("RESTORE: Restore saved file");
+		System.out.println("OVERALL position: View ranking for players in given (non-pitcher) position");
+		System.out.println("POVERALL: View rankings of pitchers");
+		System.out.println("TEAM LeagueLetter: View roster of given team");
+		System.out.println("STARS LeagueLetter: View roster of given team in drafting order");
+		System.out.println("SAVE filename.txt: Save file");
+		System.out.println("RESTORE filename.txt: Restore saved file");
 		System.out.println("EVALFUN: ");
 		System.out.println("PEVALFUN: ");
-		System.out.println("WEIGHT: change ranking weight for each position");
+		System.out.println("WEIGHT: change ranking weight for each position (ex: 1B 2 2B 3");
 		System.out.println("HELP: See available commands");
 		System.out.println("QUIT: Quit program");
 	}
 
+	/** Method prompts user for input
+	 * 
+	 */
 	private void promptUser() {
 		System.out.print("Enter a command: ");
 
